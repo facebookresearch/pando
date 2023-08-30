@@ -1,0 +1,38 @@
+http_file(
+    name = "protobuf-3.17.3-cp36-cp36m-win_amd64.whl",
+    sha256 = "a22b3a0dbac6544dacbafd4c5f6a29e389a50e3b193e2c70dae6bbf7930f651d",
+    urls = ["https://files.pythonhosted.org/packages/48/f1/49cc17101260e9651e9daab0afc8f43382e8e8d9262ae13d406e27ee83e8/protobuf-3.17.3-cp36-cp36m-win_amd64.whl"],
+)
+
+http_file(
+    name = "protobuf-3.17.3-cp36-cp36m-manylinux_2_5_x86_64.manylinux1_x86_64.whl",
+    sha256 = "6ce4d8bf0321e7b2d4395e253f8002a1a5ffbcfd7bcc0a6ba46712c07d47d0b4",
+    urls = ["https://files.pythonhosted.org/packages/53/4e/e2db88d0bb0bda6a879eea62fddbaf813719ce3770d458bc5580512d9c95/protobuf-3.17.3-cp36-cp36m-manylinux_2_5_x86_64.manylinux1_x86_64.whl"],
+)
+
+prebuilt_python_library(
+    name = "protobuf",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//:linux-x86_64",
+    ],
+    binary_src = select({
+        "config//:windows-x86_64": ":protobuf-3.17.3-cp36-cp36m-win_amd64.whl",
+        "config//:linux-x86_64": ":protobuf-3.17.3-cp36-cp36m-manylinux_2_5_x86_64.manylinux1_x86_64.whl",
+    }),
+    deps = [
+        "//third-party/pythonlibs/six:six",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+python_test(
+    name = "protobuf_import_test",
+    srcs = [
+        "protobuf_import_test.py",
+    ],
+    visibility = ["PUBLIC"],
+    deps = [
+        ":protobuf",
+    ],
+)

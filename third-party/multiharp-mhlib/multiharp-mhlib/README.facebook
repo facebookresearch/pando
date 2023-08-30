@@ -1,0 +1,6 @@
+Downloaded sofware and developer's library from here: https://www.picoquant.com/dl_software/MultiHarp150/MultiHarp150_V2_0.zip
+(md5sum 32aaf705315a69e2ac2cab35181af049)
+
+unzip and run "MultiHarp150_V2_0\MHLib v2.0.0.0\Windows\installation\setup.exe"
+
+Files copied from C:\Program Files\PicoQuant\MultiHarp-MHLibv20 and C:\Windows\System32\mhlib64.dll

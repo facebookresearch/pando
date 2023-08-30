@@ -1,0 +1,13 @@
+python_library(
+    name = "pando_library",
+    srcs = glob([
+        "*.py",
+    ]),
+    base_module = "gui.pando",
+    visibility = ["PUBLIC"],
+    deps = [
+        "//software/pypando:pypando",
+        "//software/python/gui/config:config_library",
+        "//third-party/pythonlibs/PyQt5:PyQt5",
+    ],
+)

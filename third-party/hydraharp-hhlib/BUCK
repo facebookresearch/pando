@@ -1,0 +1,23 @@
+cxx_library(
+    name = "hydraharp-hhlib_headers",
+    public_include_directories = [
+        ".",
+    ],
+    raw_headers = glob([
+        "hydraharp-hhlib/*.h",
+    ]),
+)
+
+prebuilt_cxx_library(
+    name = "hydraharp-hhlib",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//build_type:docs",
+    ],
+    import_lib = "hydraharp-hhlib/win32-x86_64/hhlib64.lib",
+    shared_lib = "hydraharp-hhlib/win32-x86_64/hhlib64.dll",
+    exported_deps = [
+        ":hydraharp-hhlib_headers",
+    ],
+    visibility = ["PUBLIC"],
+)

@@ -1,0 +1,164 @@
+auto_stop: false
+bin_size_ns: 1000
+calc_g2i: true
+pandoboxd_ip_addr: 169.254.12.34
+count_integ_period_ns: 65536000
+cri_integ_period_ns: 65536000
+cri_offset:
+  0: 0
+  1: 0
+  2: 0
+  3: 0
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+  8: 0
+  9: 0
+  10: 0
+  11: 0
+  12: 0
+  13: 0
+  14: 0
+  15: 0
+cri_width:
+  0: 35000
+  1: 35000
+  2: 35000
+  3: 35000
+  4: 35000
+  5: 35000
+  6: 35000
+  7: 35000
+  8: 35000
+  9: 35000
+  10: 35000
+  11: 35000
+  12: 35000
+  13: 35000
+  14: 35000
+  15: 35000
+device: MULTI_HARP_T3
+dtof_integ_period_ns: 65536000
+dtof_range_max: 20000
+dtof_range_min: 0
+enabled_channels:
+- 0
+- 1
+- 2
+- 3
+- 4
+- 5
+- 6
+- 7
+exp_type: TD
+experiment_length: 60.0
+final_bin_count: 32
+hharp_input_offsets:
+  0: 1
+  1: 1
+  2: 1
+  3: 1
+  4: 1
+  5: 1
+  6: 1
+  7: 1
+  8: 1
+  9: 1
+  10: 1
+  11: 1
+  12: 1
+  13: 1
+  14: 1
+  15: 1
+laser_sync_period_ps: 12500
+log_analyzed_data: true
+log_peripheral_data: true
+log_raw_data: false
+mock_file: ''
+multi_harp_sync_tdead_ps: 0
+multi_harp_sync_trigger_edge: 0
+multi_harp_sync_trigger_level_mv: -50
+multi_harp_tdead_ps:
+  0: 1
+  1: 1
+  2: 1
+  3: 1
+  4: 1
+  5: 1
+  6: 1
+  7: 1
+  8: 0
+  9: 0
+  10: 0
+  11: 0
+  12: 0
+  13: 0
+  14: 0
+  15: 0
+multi_harp_trigger_edge:
+  0: 0
+  1: 0
+  2: 0
+  3: 0
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+  8: 0
+  9: 0
+  10: 0
+  11: 0
+  12: 0
+  13: 0
+  14: 0
+  15: 0
+multi_harp_trigger_level_mv:
+  0: -50
+  1: -50
+  2: -50
+  3: -50
+  4: -50
+  5: -50
+  6: -50
+  7: -50
+  8: 0
+  9: 0
+  10: 0
+  11: 0
+  12: 0
+  13: 0
+  14: 0
+  15: 0
+n_levels: 12
+output_dir: E:/validation/120420/mh-t3
+pf32_bit_mode: SIXTEEN
+pf32_firmware_path: C:/open/ovrsource/third-party/pf32_api/pf32_api/bitfiles/PF32_USB3_[1677-8bit].bit
+pf32_laser_master: true
+points_per_level: 8
+publish_raw_data: false
+rebin_factor: 2
+use_pandoboxd: true
+use_pps: true
+xharp_level:
+  0: 500
+  1: 500
+  2: 500
+  3: 500
+  4: 500
+  5: 500
+  6: 500
+  7: 500
+xharp_sync_div: 2
+xharp_sync_level: 30
+xharp_sync_offset: -10000
+xharp_sync_zerox: 10
+xharp_zerox:
+  0: 10
+  1: 10
+  2: 10
+  3: 10
+  4: 10
+  5: 10
+  6: 10
+  7: 10

@@ -1,0 +1,8 @@
+protobuf
+PyQt5
+PyQt5-Qt5
+PyQt5-sip
+pyqtgraph
+pgcolorbar
+scipy
+

@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package pnd.proto;
+
+/* Describes a single transaction in the Pandoboxd RPC interface. */
+message PandoboxdTransaction {
+  /* Check if Pandoboxd is up and running. */
+  message Ping {
+    message Request {}
+    message Response {}
+
+    oneof direction {
+      Request req = 1;
+      Response rep = 2;
+    }
+  }
+
+  /* Start an experiment. */
+  message Start {
+    message Request {
+      int32 experiment_id = 1;
+      uint32 camera_frame_trigger_0_period_10ns = 2;
+      uint32 camera_frame_trigger_1_period_10ns = 3;
+    }
+    message Response {}
+
+    oneof direction {
+      Request req = 1;
+      Response rep = 2;
+    }
+  }
+
+  /* Stop an experiment. */
+  message Stop {
+    message Request {}
+    message Response {}
+
+    oneof direction {
+      Request req = 1;
+      Response rep = 2;
+    }
+  }
+
+  /* Get batched report messages. */
+  message GetReports {
+    message Request {};
+    message Response {
+      message Report {
+        string severity = 1;
+        string message = 2;
+      }
+
+      repeated Report reports = 1;
+    }
+
+    oneof direction {
+      Request req = 1;
+      Response rep = 2;
+    }
+  }
+
+  /* The status of a single transaction. */
+  enum Status {
+    STATUS_INCOMPLETE = 0; // Transaction has not yet been initiated
+    STATUS_OK = 1; // Transaction completed successfully
+    STATUS_ERR_UNSPECIFIED = 2; // Transaction encountered unspecified error
+    STATUS_ERR_UNIMPLEMENTED = 3; // Transaction is not implemented in Pandoboxd
+    STATUS_ERR_ALREADY_STARTED = 4; // Start transaction initiated while Pandoboxd already running
+    STATUS_ERR_ALREADY_STOPPED = 5; // Stop transaction initiated while Pandoboxd already stopped
+  }
+
+  /* The field set in this oneof indicates the transaction type. */
+  oneof type {
+    Ping ping = 1;
+    Start start = 2;
+    Stop stop = 3;
+    GetReports get_reports = 4;
+  }
+
+  /* Transaction status. */
+  Status status = 5;
+}

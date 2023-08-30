@@ -1,0 +1,19 @@
+load(":base_platform_constraint_values.bzl", "base_platform_constraint_values")
+
+config_setting(
+    name = "windows-x86_64",
+    constraint_values = base_platform_constraint_values.windows_x86_64,
+    visibility = ["PUBLIC"],
+)
+
+config_setting(
+    name = "linux-x86_64",
+    constraint_values = base_platform_constraint_values.linux_x86_64,
+    visibility = ["PUBLIC"],
+)
+
+config_setting(
+    name = "linux-xilinx-aarch64",
+    constraint_values = base_platform_constraint_values.linux_xilinx_aarch64,
+    visibility = ["PUBLIC"],
+)

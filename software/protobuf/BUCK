@@ -1,0 +1,33 @@
+load("//tools/build_defs:protobuf.bzl", "proto_cxx_library", "proto_py_library")
+
+proto_py_library(
+    name = "pando_protobuf_py",
+    protos = [
+        "pando.proto",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+proto_cxx_library(
+    name = "pando_protobuf",
+    protos = [
+        "pando.proto",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+proto_cxx_library(
+    name = "pandoboxd_rpc",
+    protos = [
+        "pandoboxd_rpc.proto",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+proto_py_library(
+    name = "pandoboxd_rpc_py",
+    protos = [
+        "pandoboxd_rpc.proto",
+    ],
+    visibility = ["PUBLIC"],
+)

@@ -1,0 +1,25 @@
+cxx_binary(
+    name = "pandoboxd",
+    compatible_with = [
+        "config//:linux-xilinx-aarch64",
+        "config//build_type:docs",
+    ],
+    srcs = native.glob([
+        "src/**/*.cpp",
+    ]),
+    include_directories = [
+        "src",
+    ],
+    raw_headers = native.glob([
+        "src/**/*.h",
+    ]),
+    visibility = ["PUBLIC"],
+    deps = [
+        "//software/common:common",
+        "//software/protobuf:pando_protobuf",
+        "//software/protobuf:pandoboxd_rpc",
+        "//software/libpandobox:libpandobox",
+        "//third-party/fmt:fmt",
+        "//third-party/zmq:cppzmq",
+    ],
+)

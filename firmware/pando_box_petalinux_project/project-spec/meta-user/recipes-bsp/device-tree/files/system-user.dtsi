@@ -1,0 +1,161 @@
+/include/ "system-conf.dtsi"
+/ {
+	chosen {
+       	       bootargs = "console=ttyPS0,115200 earlyprintk uio_pdrv_genirq.of_id=generic-uio strict-devmem=0";
+	};
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+		reserved: buffer@0 {
+			compatible = "xlnx,reserved-memory";
+			no-map;
+			reg = <0x0 0x10000000 0x0 0x100000>;
+			linux,cma-default;
+		};
+	};
+};
+
+&gem3 {
+	status = "okay";
+	local-mac-address = [00 0a 35 00 02 90];
+	phy-mode = "rgmii-id";
+	phy-handle = <&phy0>;
+	phy0: phy@9 {
+		reg = <0x9>;
+		ti,rx-internal-delay = <0x5>;
+		ti,tx-internal-delay = <0x5>;
+		ti,fifo-depth = <0x1>;
+	};
+};
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <400000>;
+
+	i2cswitch@70 { /* U7 on UZ3EG SOM */
+		compatible = "nxp,pca9542";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg = <0x70>;
+		i2c@0 { /* i2c mw 70 0 1 */
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <0>;
+			/* IIC_EEPROM */
+			eeprom@51 { /* U5 on UZ3EG IOCC and U7 on the UZ7EV EVCC*/
+				compatible = "at,24c08";
+				reg = <0x51>;
+			};
+		};
+	};
+};
+
+&qspi {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+	is-dual = <1>; /* Set for dual-parallel QSPI config */
+	num-cs = <2>;
+	xlnx,fb-clk = <0x1>;
+	flash0: flash@0 {
+        /* The Flash described below doesn't match our board ("micron,n25qu256a"), but is needed */
+        /* so the Flash MTD partitions are correctly identified in /proc/mtd */
+		compatible = "micron,m25p80"; /* 32MB */
+		#address-cells = <1>;
+		#size-cells = <1>;
+		reg = <0x0>;
+		spi-tx-bus-width = <1>;
+		spi-rx-bus-width = <4>; /* FIXME also DUAL configuration possible */
+		spi-max-frequency = <108000000>; /* Set to 108000000 Based on DC1 spec */
+	};
+};
+
+/* SD0 eMMC, 8-bit wide data bus */
+&sdhci0 {
+	status = "okay";
+	bus-width = <8>;
+	max-frequency = <50000000>;
+};
+
+/* SD1 with level shifter */
+&sdhci1 {
+	status = "okay";
+	max-frequency = <50000000>;
+	no-1-8-v;	/* for 1.0 silicon */
+};
+
+/* ULPI SMSC USB3320 */
+&usb0 {
+	status = "okay";
+};
+
+&dwc3_0 {
+	status = "okay";
+	dr_mode = "host";
+	phy-names = "usb3-phy";
+};
+
+&amba {
+	usb1@ff9e0000 {
+		dwc3@fe300000 {
+		snps,enable_auto_retry;
+		};
+	};
+};
+
+&axi_dma_0 {
+	compatible = "generic-uio";
+	linux,uio-name = "axi_dma_0";
+};
+
+&adc_0 {
+	compatible = "generic-uio";
+	linux,uio-name = "adc_0";
+};
+
+&adc_1 {
+	compatible = "generic-uio";
+	linux,uio-name = "adc_1";
+};
+
+&adc_2 {
+	compatible = "generic-uio";
+	linux,uio-name = "adc_2";
+};
+
+&adc_3 {
+	compatible = "generic-uio";
+	linux,uio-name = "adc_3";
+};
+
+&digital_inputs_0 {
+	compatible = "generic-uio";
+	linux,uio-name = "digital_inputs_0";
+};
+
+&global_config_regs_0 {
+	compatible = "generic-uio";
+	linux,uio-name = "global_config_regs_0";
+};
+
+&imu_0 {
+	compatible = "generic-uio";
+	linux,uio-name = "imu_0";
+};
+
+&traffic_generator_0 {
+	compatible = "generic-uio";
+	linux,uio-name = "traffic_generator_0";
+};
+
+&frame_trig_gen_0{
+	compatible = "generic-uio";
+	linux,uio-name = "frame_trig_gen_0";
+};
+
+&frame_trig_gen_1{
+	compatible = "generic-uio";
+	linux,uio-name = "frame_trig_gen_1";
+};

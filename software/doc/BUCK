@@ -1,0 +1,24 @@
+genrule(
+    name = "doxyfile",
+    srcs = ["Doxyfile.in"],
+    out = "Doxyfile",
+    cmd =
+        "INPUT=;" +
+        'INPUT="${INPUT} $(query_paths inputs(//software/common:common))";' +
+        'INPUT="${INPUT} $(query_paths inputs(//software/pando:pando))";' +
+        'INPUT="${INPUT} $(query_paths inputs(//software/pandoboxd:pandoboxd))";' +
+        'sed "s|@INPUT@|${INPUT}|" ${SRCS} > ${OUT};',
+)
+
+genrule(
+    name = "doxygen_docs",
+    out = "./",
+    cmd = "cd ${OUT}; doxygen $(location :doxyfile)",
+)
+
+genrule(
+    name = "sphinx_docs",
+    srcs = glob(["sphinx_src/**/*"]),
+    out = "./",
+    cmd = "pwd; sphinx-build -b html -Dbreathe_projects.Sawyer=$(location :doxygen_docs)/xml/ ${SRCDIR}/sphinx_src ${OUT}",
+)

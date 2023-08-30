@@ -1,0 +1,50 @@
+cxx_library(
+    name = "contrast_calcs",
+    srcs = [
+        "src/normalize.cpp",
+        "src/dark_image.cpp",
+        "src/rolling_average.cpp",
+        "src/contrast_calculator.cpp",
+        "src/pybind_module.cpp",
+    ],
+    include_directories = ["src"],
+    raw_headers = [
+        "src/normalize.h",
+        "src/dark_image.h",
+        "src/rolling_average.h",
+        "src/contrast_calculator.h",
+    ],
+    soname = select({
+        "config//os:windows": "contrast_calcs.pyd",
+        "DEFAULT": "contrast_calcs.so",
+    }),
+    preferred_linkage = "shared",
+    link_style = select({
+        "config//os:windows": "static",
+        "DEFAULT": "static_pic",
+    }),
+    compiler_flags = select({
+        "config//toolchain:msvc": [
+            "/arch:AVX2",
+            "/Qvec-report:2",
+        ],
+        "DEFAULT": [
+        ],
+    }),
+    visibility = ["PUBLIC"],
+    deps = [
+        "//third-party/pybind11:pybind11",
+    ],
+)
+
+python_test(
+    name = "contrast_calcs_test",
+    srcs = [
+        "test/test.py",
+    ],
+    visibility = ["PUBLIC"],
+    deps = [
+        ":contrast_calcs",
+        "//third-party/pythonlibs/numpy:numpy",
+    ],
+)

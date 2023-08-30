@@ -1,0 +1,87 @@
+http_file(
+    name = "PyQt5-5.15.4-cp36.cp37.cp38.cp39-none-win_amd64.whl",
+    sha256 = "213bebd51821ed89b4d5b35bb10dbe67564228b3568f463a351a08e8b1677025",
+    urls = ["https://files.pythonhosted.org/packages/9e/53/9476464c2a8db5252de96fd8ff39ec5db6ef09b8a08a7152546b7f142d90/PyQt5-5.15.4-cp36.cp37.cp38.cp39-none-win_amd64.whl"],
+)
+
+http_file(
+    name = "PyQt5-5.15.4-cp36.cp37.cp38.cp39-abi3-manylinux2014_x86_64.whl",
+    sha256 = "883a549382fc22d29a0568f3ef20b38c8e7ab633a59498ac4eb63a3bf36d3fd3",
+    urls = ["https://files.pythonhosted.org/packages/ed/62/cd9f10702c75b242f82da858668fba0cda04cda92133244d3d1555e530b4/PyQt5-5.15.4-cp36.cp37.cp38.cp39-abi3-manylinux2014_x86_64.whl"],
+)
+
+prebuilt_python_library(
+    name = "PyQt5",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//:linux-x86_64",
+    ],
+    binary_src = select({
+        "config//:windows-x86_64": ":PyQt5-5.15.4-cp36.cp37.cp38.cp39-none-win_amd64.whl",
+        "config//:linux-x86_64": ":PyQt5-5.15.4-cp36.cp37.cp38.cp39-abi3-manylinux2014_x86_64.whl",
+    }),
+    deps = [
+        ":PyQt5-sip",
+        ":PyQt5-Qt5",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+http_file(
+    name = "PyQt5_sip-12.9.0-cp36-cp36m-win_amd64.whl",
+    sha256 = "69a3ad4259172e2b1aa9060de211efac39ddd734a517b1924d9c6c0cc4f55f96",
+    urls = ["https://files.pythonhosted.org/packages/ec/e8/b6425296eb28d3938e3049fdf94993d71da2818203d7fcdcb41c2823b1bb/PyQt5_sip-12.9.0-cp36-cp36m-win_amd64.whl"],
+)
+
+http_file(
+    name = "PyQt5_sip-12.9.0-cp36-cp36m-manylinux1_x86_64.whl",
+    sha256 = "83c3220b1ca36eb8623ba2eb3766637b19eb0ce9f42336ad8253656d32750c0a",
+    urls = ["https://files.pythonhosted.org/packages/cc/c2/c4f637463825ff04b206de85d57707b3559ec1d34af1bd6621ff8d6de972/PyQt5_sip-12.9.0-cp36-cp36m-manylinux1_x86_64.whl"],
+)
+
+prebuilt_python_library(
+    name = "PyQt5-sip",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//:linux-x86_64",
+    ],
+    binary_src = select({
+        "config//:windows-x86_64": ":PyQt5_sip-12.9.0-cp36-cp36m-win_amd64.whl",
+        "config//:linux-x86_64": ":PyQt5_sip-12.9.0-cp36-cp36m-manylinux1_x86_64.whl",
+    }),
+)
+
+http_file(
+    name = "PyQt5_Qt5-5.15.2-py3-none-win_amd64.whl",
+    sha256 = "750b78e4dba6bdf1607febedc08738e318ea09e9b10aea9ff0d73073f11f6962",
+    urls = ["https://files.pythonhosted.org/packages/37/97/5d3b222b924fa2ed4c2488925155cd0b03fd5d09ee1cfcf7c553c11c9f66/PyQt5_Qt5-5.15.2-py3-none-win_amd64.whl"],
+)
+
+http_file(
+    name = "PyQt5_Qt5-5.15.2-py3-none-manylinux2014_x86_64.whl",
+    sha256 = "1988f364ec8caf87a6ee5d5a3a5210d57539988bf8e84714c7d60972692e2f4a",
+    urls = ["https://files.pythonhosted.org/packages/83/d4/241a6a518d0bcf0a9fcdcbad5edfed18d43e884317eab8d5230a2b27e206/PyQt5_Qt5-5.15.2-py3-none-manylinux2014_x86_64.whl"],
+)
+
+prebuilt_python_library(
+    name = "PyQt5-Qt5",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//:linux-x86_64",
+    ],
+    binary_src = select({
+        "config//:windows-x86_64": ":PyQt5_Qt5-5.15.2-py3-none-win_amd64.whl",
+        "config//:linux-x86_64": ":PyQt5_Qt5-5.15.2-py3-none-manylinux2014_x86_64.whl",
+    }),
+)
+
+python_test(
+    name = "pyqt5_import_test",
+    srcs = [
+        "pyqt5_import_test.py",
+    ],
+    visibility = ["PUBLIC"],
+    deps = [
+        ":PyQt5",
+    ],
+)

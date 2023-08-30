@@ -1,0 +1,6 @@
+export_file(
+    name = "labgraph",
+    src = "labgraph-1.0.3-cp36-cp36m-win_amd64.whl",
+    out = "labgraph-1.0.3-cp36-cp36m-win_amd64.whl",
+    visibility = ["PUBLIC"],
+)

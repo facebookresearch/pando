@@ -1,0 +1,3 @@
+load(":BUCK.bzl", "define_targets")
+
+define_targets()

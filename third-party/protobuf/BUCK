@@ -1,0 +1,284 @@
+load(":protobuf_rule_helper.bzl", "define_helpers")
+
+################################################################################
+# Protobuf Runtime Library
+################################################################################
+
+COMPILER_FLAGS = select({
+    "config//toolchain:msvc": [
+        "/DHAVE_PTHREAD",
+        "/wd4018",  # -Wno-sign-compare
+        "/wd4065",  # switch statement contains 'default' but no 'case' labels
+        "/wd4146",  # unary minus operator applied to unsigned type, result still unsigned
+        "/wd4244",  # 'conversion' conversion from 'type1' to 'type2', possible loss of data
+        "/wd4251",  # 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
+        "/wd4267",  # 'var' : conversion from 'size_t' to 'type', possible loss of data
+        "/wd4305",  # 'identifier' : truncation from 'type1' to 'type2'
+        "/wd4307",  # 'operator' : integral constant overflow
+        "/wd4309",  # 'conversion' : truncation of constant value
+        "/wd4334",  # 'operator' : result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+        "/wd4355",  # 'this' : used in base member initializer list
+        "/wd4506",  # no definition for inline function 'function'
+        "/wd4514",  # -Wno-unused-function
+        "/wd4800",  # 'type' : forcing value to bool 'true' or 'false' (performance warning)
+        "/wd4996",  # The compiler encountered a deprecated declaration.
+        "/wd4703",  # potentially uninitialized local pointer variable 'var' used
+    ],
+    "DEFAULT": [
+        "-DHAVE_PTHREAD",
+        "-Woverloaded-virtual",
+        "-Wno-sign-compare",
+        "-Wno-unused-function",
+        # Prevents ISO C++ const string assignment warnings for pyext sources.
+        "-Wno-write-strings",
+        "-Wno-deprecated-declarations",
+    ],
+})
+
+LINKER_FLAGS = select({
+    "config//toolchain:msvc": [
+        # Suppress linker warnings about files with no symbols defined.
+        "-ignore:4221",
+    ],
+    "DEFAULT": [
+        "-lpthread",
+        "-lm",
+    ],
+})
+
+define_helpers()
+
+cxx_library(
+    name = "protobuf_lite",
+    preferred_linkage = "static",
+    srcs = [
+        "protobuf/src/google/protobuf/any_lite.cc",
+        "protobuf/src/google/protobuf/arena.cc",
+        "protobuf/src/google/protobuf/arenastring.cc",
+        "protobuf/src/google/protobuf/extension_set.cc",
+        "protobuf/src/google/protobuf/field_access_listener.cc",
+        "protobuf/src/google/protobuf/generated_enum_util.cc",
+        "protobuf/src/google/protobuf/generated_message_table_driven_lite.cc",
+        "protobuf/src/google/protobuf/generated_message_util.cc",
+        "protobuf/src/google/protobuf/implicit_weak_message.cc",
+        "protobuf/src/google/protobuf/io/coded_stream.cc",
+        "protobuf/src/google/protobuf/io/io_win32.cc",
+        "protobuf/src/google/protobuf/io/strtod.cc",
+        "protobuf/src/google/protobuf/io/zero_copy_stream.cc",
+        "protobuf/src/google/protobuf/io/zero_copy_stream_impl.cc",
+        "protobuf/src/google/protobuf/io/zero_copy_stream_impl_lite.cc",
+        "protobuf/src/google/protobuf/map.cc",
+        "protobuf/src/google/protobuf/message_lite.cc",
+        "protobuf/src/google/protobuf/parse_context.cc",
+        "protobuf/src/google/protobuf/repeated_field.cc",
+        "protobuf/src/google/protobuf/stubs/bytestream.cc",
+        "protobuf/src/google/protobuf/stubs/common.cc",
+        "protobuf/src/google/protobuf/stubs/int128.cc",
+        "protobuf/src/google/protobuf/stubs/status.cc",
+        "protobuf/src/google/protobuf/stubs/statusor.cc",
+        "protobuf/src/google/protobuf/stubs/stringpiece.cc",
+        "protobuf/src/google/protobuf/stubs/stringprintf.cc",
+        "protobuf/src/google/protobuf/stubs/structurally_valid.cc",
+        "protobuf/src/google/protobuf/stubs/strutil.cc",
+        "protobuf/src/google/protobuf/stubs/time.cc",
+        "protobuf/src/google/protobuf/wire_format_lite.cc",
+    ],
+    raw_headers = glob([
+        "protobuf/src/google/**/*.h",
+        "protobuf/src/google/protobuf/**/*.inc",
+    ]),
+    compiler_flags = COMPILER_FLAGS,
+    public_include_directories = ["protobuf/src"],
+    linker_flags = LINKER_FLAGS,
+    visibility = ["PUBLIC"],
+)
+
+cxx_library(
+    name = "protobuf",
+    preferred_linkage = "static",
+    srcs = [
+        "protobuf/src/google/protobuf/any.cc",
+        "protobuf/src/google/protobuf/any.pb.cc",
+        "protobuf/src/google/protobuf/api.pb.cc",
+        "protobuf/src/google/protobuf/compiler/importer.cc",
+        "protobuf/src/google/protobuf/compiler/parser.cc",
+        "protobuf/src/google/protobuf/descriptor.cc",
+        "protobuf/src/google/protobuf/descriptor.pb.cc",
+        "protobuf/src/google/protobuf/descriptor_database.cc",
+        "protobuf/src/google/protobuf/duration.pb.cc",
+        "protobuf/src/google/protobuf/dynamic_message.cc",
+        "protobuf/src/google/protobuf/empty.pb.cc",
+        "protobuf/src/google/protobuf/extension_set_heavy.cc",
+        "protobuf/src/google/protobuf/field_mask.pb.cc",
+        "protobuf/src/google/protobuf/generated_message_reflection.cc",
+        "protobuf/src/google/protobuf/generated_message_table_driven.cc",
+        "protobuf/src/google/protobuf/io/gzip_stream.cc",
+        "protobuf/src/google/protobuf/io/printer.cc",
+        "protobuf/src/google/protobuf/io/tokenizer.cc",
+        "protobuf/src/google/protobuf/map_field.cc",
+        "protobuf/src/google/protobuf/message.cc",
+        "protobuf/src/google/protobuf/reflection_ops.cc",
+        "protobuf/src/google/protobuf/service.cc",
+        "protobuf/src/google/protobuf/source_context.pb.cc",
+        "protobuf/src/google/protobuf/struct.pb.cc",
+        "protobuf/src/google/protobuf/stubs/substitute.cc",
+        "protobuf/src/google/protobuf/text_format.cc",
+        "protobuf/src/google/protobuf/timestamp.pb.cc",
+        "protobuf/src/google/protobuf/type.pb.cc",
+        "protobuf/src/google/protobuf/unknown_field_set.cc",
+        "protobuf/src/google/protobuf/util/delimited_message_util.cc",
+        "protobuf/src/google/protobuf/util/field_comparator.cc",
+        "protobuf/src/google/protobuf/util/field_mask_util.cc",
+        "protobuf/src/google/protobuf/util/internal/datapiece.cc",
+        "protobuf/src/google/protobuf/util/internal/default_value_objectwriter.cc",
+        "protobuf/src/google/protobuf/util/internal/error_listener.cc",
+        "protobuf/src/google/protobuf/util/internal/field_mask_utility.cc",
+        "protobuf/src/google/protobuf/util/internal/json_escaping.cc",
+        "protobuf/src/google/protobuf/util/internal/json_objectwriter.cc",
+        "protobuf/src/google/protobuf/util/internal/json_stream_parser.cc",
+        "protobuf/src/google/protobuf/util/internal/object_writer.cc",
+        "protobuf/src/google/protobuf/util/internal/proto_writer.cc",
+        "protobuf/src/google/protobuf/util/internal/protostream_objectsource.cc",
+        "protobuf/src/google/protobuf/util/internal/protostream_objectwriter.cc",
+        "protobuf/src/google/protobuf/util/internal/type_info.cc",
+        "protobuf/src/google/protobuf/util/internal/type_info_test_helper.cc",
+        "protobuf/src/google/protobuf/util/internal/utility.cc",
+        "protobuf/src/google/protobuf/util/json_util.cc",
+        "protobuf/src/google/protobuf/util/message_differencer.cc",
+        "protobuf/src/google/protobuf/util/time_util.cc",
+        "protobuf/src/google/protobuf/util/type_resolver_util.cc",
+        "protobuf/src/google/protobuf/wire_format.cc",
+        "protobuf/src/google/protobuf/wrappers.pb.cc",
+    ],
+    raw_headers = glob([
+        "protobuf/src/**/*.h",
+        "protobuf/src/**/*.inc",
+    ]),
+    compiler_flags = COMPILER_FLAGS,
+    public_include_directories = ["protobuf/src"],
+    linker_flags = LINKER_FLAGS,
+    visibility = ["PUBLIC"],
+    deps = [":protobuf_lite"],
+)
+
+################################################################################
+# Protocol Buffers Compiler
+################################################################################
+
+cxx_library(
+    name = "protoc_lib",
+    preferred_linkage = "static",
+    srcs = [
+        "protobuf/src/google/protobuf/compiler/code_generator.cc",
+        "protobuf/src/google/protobuf/compiler/command_line_interface.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_enum.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_enum_field.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_extension.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_field.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_file.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_generator.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_helpers.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_map_field.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_message.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_message_field.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_padding_optimizer.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_parse_function_generator.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_primitive_field.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_service.cc",
+        "protobuf/src/google/protobuf/compiler/cpp/cpp_string_field.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_doc_comment.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_enum.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_enum_field.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_field_base.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_generator.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_helpers.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_map_field.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_message.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_message_field.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_primitive_field.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_reflection_class.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_repeated_enum_field.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_repeated_message_field.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_repeated_primitive_field.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_source_generator_base.cc",
+        "protobuf/src/google/protobuf/compiler/csharp/csharp_wrapper_field.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_context.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_doc_comment.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_enum.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_enum_field.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_enum_field_lite.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_enum_lite.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_extension.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_extension_lite.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_field.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_file.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_generator.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_generator_factory.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_helpers.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_kotlin_generator.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_map_field.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_map_field_lite.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_message.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_message_builder.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_message_builder_lite.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_message_field.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_message_field_lite.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_message_lite.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_name_resolver.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_primitive_field.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_primitive_field_lite.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_service.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_shared_code_generator.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_string_field.cc",
+        "protobuf/src/google/protobuf/compiler/java/java_string_field_lite.cc",
+        "protobuf/src/google/protobuf/compiler/js/js_generator.cc",
+        "protobuf/src/google/protobuf/compiler/js/well_known_types_embed.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_enum.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_enum_field.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_extension.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_field.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_file.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_generator.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_helpers.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_map_field.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_message.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_message_field.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_oneof.cc",
+        "protobuf/src/google/protobuf/compiler/objectivec/objectivec_primitive_field.cc",
+        "protobuf/src/google/protobuf/compiler/php/php_generator.cc",
+        "protobuf/src/google/protobuf/compiler/plugin.cc",
+        "protobuf/src/google/protobuf/compiler/plugin.pb.cc",
+        "protobuf/src/google/protobuf/compiler/python/python_generator.cc",
+        "protobuf/src/google/protobuf/compiler/ruby/ruby_generator.cc",
+        "protobuf/src/google/protobuf/compiler/subprocess.cc",
+        "protobuf/src/google/protobuf/compiler/zip_writer.cc",
+    ],
+    compiler_flags = COMPILER_FLAGS,
+    linker_flags = LINKER_FLAGS,
+    visibility = ["PUBLIC"],
+    deps = [":protobuf"],
+)
+
+cxx_binary(
+    name = "protoc",
+    srcs = ["protobuf/src/google/protobuf/compiler/main.cc"],
+    linker_flags = LINKER_FLAGS,
+    visibility = ["PUBLIC"],
+    deps = [":protoc_lib"],
+)
+
+# As of v2020.09.01.01, the stable buck branch coerces $(exe) macros to the
+# target flavor instead of the host flavor, so the only way to run protoc on
+# the host during cross compilation is to explicitly specify the host flavor.
+# This still isn't quite right, because the selects above will be evaluated
+# with the target platform's constraints. As a workaround, we make sure that
+# the target platform's value of config//toolchain:msvc is also appropriate
+# for the host platform.
+command_alias(
+    name = "host_protoc",
+    exe = select({
+        "config//toolchain:msvc": ":protoc#windows-x86_64" if (host_info().os.is_windows and host_info().arch.is_x86_64) else ":UNSUPPORTED_HOST_TARGET_COMBO",
+        "DEFAULT": ":protoc#linux-x86_64" if (host_info().os.is_linux and host_info().arch.is_x86_64) else ":UNSUPPORTED_HOST_TARGET_COMBO",
+    }),
+    visibility = ["PUBLIC"],
+)

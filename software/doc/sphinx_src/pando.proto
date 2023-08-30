@@ -1,0 +1,242 @@
+syntax = "proto3";
+option cc_enable_arenas = true;
+
+package pnd.proto;
+
+message Timestamps {
+  message Channel {
+    repeated fixed32 micro_times = 3;
+    repeated fixed64 macro_times = 4;
+  }
+
+  message Meta {}
+
+  map<sfixed32, Channel> channels = 2;
+  Meta meta = 3;
+}
+
+message Markers {
+  message Channel {
+    repeated fixed64 macro_times = 2;
+  }
+
+  message Meta {}
+
+  map<sfixed32, Channel> channels = 2;
+  Meta meta = 3;
+}
+
+message G2 {
+  message Channel {
+    sfixed32 channel_1 = 6;
+    sfixed32 channel_2 = 7;
+    repeated double g2 = 5;
+  }
+
+  message Meta {
+    double dt = 1;
+    repeated sfixed32 k = 2;
+  }
+
+  map<sfixed32, Channel> channels = 2;
+  Meta meta = 3;
+}
+
+message G2i {
+  message Channel {
+    sfixed32 channel_1 = 8;
+    sfixed32 channel_2 = 9;
+    repeated double g2i = 5;
+    fixed32 utime_from_ps = 10;
+    fixed32 utime_until_ps = 11;
+  }
+
+  message Meta {
+    double dt = 1;
+    repeated sfixed32 k = 2;
+  }
+
+  map<sfixed32, Channel> channels = 2;
+  Meta meta = 3;
+}
+
+message Dtof {
+  message Channel {
+    repeated fixed32 counts = 6;
+  }
+
+  message Meta {
+    fixed32 resolution = 1;
+    fixed32 range_min = 2;
+    fixed32 range_max = 3;
+    double integration_period_ns = 4;
+  }
+
+  map<sfixed32, Channel> channels = 2;
+  Meta meta = 3;
+}
+
+message Cri {
+  message Channel {
+    fixed32 utime_from_ps = 5;
+    fixed32 utime_until_ps = 6;
+    fixed32 count = 7;
+  }
+
+  message Meta {
+    double integration_period_ns = 1;
+  }
+
+  map<sfixed32, Channel> channels = 2;
+  Meta meta = 3;
+}
+
+message Counts {
+  message Channel {
+    fixed64 count = 3;
+  }
+
+  message Meta {
+    double integration_period_ns = 1;
+  }
+
+  map<sfixed32, Channel> channels = 2;
+  Meta meta = 3;
+}
+
+enum EventType {
+  EVENT_UNSPECIFIED = 0;
+  EVENT_START = 1;
+  EVENT_STOP = 2;
+}
+
+message Event {
+  EventType event = 1;
+}
+
+message Histograms {
+  message Channel {
+    repeated fixed32 counts = 5;
+  }
+
+  message Meta {
+    sfixed64 bin_size = 1;
+    fixed64 first_bin_idx = 2;
+    fixed64 last_bin_idx = 3;
+  }
+
+  map<sfixed32, Channel> channels = 2;
+  Meta meta = 3;
+}
+
+enum PowerUnit {
+  UNIT_UNSPECIFIED = 0;
+  UNIT_WATTS = 1;
+  UNIT_DBM = 2;
+}
+
+message Power {
+  message Channel {
+    double power = 1;
+    PowerUnit units = 2;
+  }
+
+  message Meta {}
+
+  map<sfixed32, Channel> channels = 2;
+  Meta meta = 3;
+}
+
+message Imu {
+  int32 device_id = 1;
+  int32 gyro_x = 2;
+  int32 gyro_y = 3;
+  int32 gyro_z = 4;
+  int32 accel_x = 5;
+  int32 accel_y = 6;
+  int32 accel_z = 7;
+  int32 fsync = 8;
+}
+
+enum DigitalEdgeType {
+  FALLING_EDGE = 0;
+  RISING_EDGE = 1;
+}
+
+message DigitalIn {
+  int32 device_id = 1;
+  DigitalEdgeType edge = 2;
+}
+
+message RespBelt {
+  int32 device_id = 1;
+  int32 sample = 2;
+}
+
+message PulseOx {
+  int32 device_id = 1;
+  int32 sample = 2;
+}
+
+message HRM {
+  int32 device_id = 1;
+  int32 sample = 2;
+}
+
+message AnalogPowerMeter {
+  int32 device_id = 1;
+  int32 sample = 2;
+}
+
+message PpsStats {
+  sfixed64 offset_ns = 3;
+  sfixed64 jitter_ns = 4;
+}
+
+message TrafficGen {
+  int32 device_id = 1;
+}
+
+message CameraImage {
+  fixed32 device_id = 1;
+  fixed32 width = 2;
+  fixed32 height = 3;
+  fixed32 bytes_per_pixel = 4;
+  bytes image_data = 5;
+  double exposure_time_us = 6;
+}
+
+message Packet {
+  message Header {
+    int32 experiment_id = 1; // incremented on every experiment stop/start
+    int32 sequence_number = 2; // incremented every message
+    int64 timestamp = 3; // nanoseconds
+  }
+
+  message Payload {
+    oneof data {
+      Timestamps timestamps = 1;
+      G2 g2 = 2;
+      Counts counts = 7;
+      Dtof dtof = 8;
+      Cri cri = 9;
+      Event event = 10;
+      Histograms histograms = 11;
+      Power power = 12;
+      Markers markers = 13;
+      Imu imu = 14;
+      DigitalIn digital_in = 15;
+      RespBelt resp_belt = 16;
+      PulseOx pulse_ox = 17;
+      HRM hrm = 18;
+      G2i g2i = 19;
+      PpsStats pps_stats = 20;
+      TrafficGen traffic_gen = 21;
+      AnalogPowerMeter analog_power_meter = 22;
+      CameraImage camera_image = 23;
+    }
+  }
+
+  Header header = 1;
+  Payload payload = 2;
+}

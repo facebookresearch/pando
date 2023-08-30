@@ -1,0 +1,14 @@
+python_library(
+    name = "camera_viewer_library",
+    srcs = glob([
+        "*.py",
+    ]),
+    base_module = "gui.camera_viewer",
+    visibility = ["PUBLIC"],
+    deps = [
+        "//third-party/pythonlibs/PyQt5:PyQt5",
+        "//third-party/pythonlibs/protobuf:protobuf",
+        "//third-party/pythonlibs/pyzmq:pyzmq",
+        "//software/protobuf:pando_protobuf_py",
+    ],
+)

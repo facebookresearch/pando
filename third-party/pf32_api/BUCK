@@ -1,0 +1,42 @@
+load(
+    "//tools/build_defs:dll_without_implib.bzl",
+    "dll_without_implib",
+)
+
+cxx_library(
+    name = "pf32_correlator_api_headers",
+    public_include_directories = [
+        ".",
+    ],
+    raw_headers = [
+        "pf32_api/PF_types.h",
+        "pf32_api/PF32_API.h",
+        "pf32_api/PF32_CORRELATOR_API.h",
+    ],
+)
+
+dll_without_implib(
+    name = "okFrontPanel",
+    dll = "pf32_api/win32-x86_64/okFrontPanel.dll",
+)
+
+dll_without_implib(
+    name = "Qt5Core",
+    dll = "pf32_api/win32-x86_64/Qt5Core.dll",
+)
+
+prebuilt_cxx_library(
+    name = "pf32_correlator_api",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//build_type:docs",
+    ],
+    import_lib = "pf32_api/win32-x86_64/PF32_CORRELATOR_API.lib",
+    shared_lib = "pf32_api/win32-x86_64/PF32_CORRELATOR_API.dll",
+    exported_deps = [
+        ":pf32_correlator_api_headers",
+        ":okFrontPanel",
+        ":Qt5Core",
+    ],
+    visibility = ["PUBLIC"],
+)

@@ -1,0 +1,35 @@
+python_binary(
+    name = "copy_system_python",
+    main = "copy_system_python.py",
+)
+
+genrule(
+    name = "copy_includes",
+    out = "include",
+    cmd = "$(exe :copy_system_python) INCLUDES $OUT",
+)
+
+genrule(
+    name = "copy_windows_imp_lib",
+    out = ".",
+    cmd = "$(exe :copy_system_python) WINDOWS_IMP_LIBS $OUT",
+)
+
+# prebuilt_cxx_library doesn't seem to expand $(location) macros in its exported_linker_flags argument, so we use this shim.
+cxx_library(
+    name = "exported_linker_flags_shim",
+    exported_linker_flags = select({
+        "config//os:windows": [
+            "/LIBPATH:$(location :copy_windows_imp_lib)",
+        ],
+        "DEFAULT": None,
+    }),
+)
+
+prebuilt_cxx_library(
+    name = "python",
+    header_dirs = [":copy_includes"],
+    header_only = True,
+    exported_deps = [":exported_linker_flags_shim"],
+    visibility = ["PUBLIC"],
+)

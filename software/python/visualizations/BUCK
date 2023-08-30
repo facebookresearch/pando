@@ -1,0 +1,48 @@
+python_library(
+    name = "add_to_zip_lib",
+    srcs = [
+        "add_to_zip.py",
+    ],
+    base_module = "",
+    visibility = ["PUBLIC"],
+)
+
+python_binary(
+    name = "add_to_zip",
+    main_module = "add_to_zip",
+    visibility = ["PUBLIC"],
+    deps = [
+        ":add_to_zip_lib",
+    ],
+    zip_safe = False,
+)
+
+filegroup(
+    name = "bci_src",
+    visibility = ["PUBLIC"],
+    srcs = glob(["*/**/*.py"]),
+)
+
+zip_file(
+    name = "visualizations_src",
+    srcs = glob(["*/**/*"]),
+    entries_to_exclude = [".*\\_\\_pycache\\_\\_.*"],
+    visibility = ["PUBLIC"],
+)
+
+export_file(
+    name = "readme",
+    src = "README.md",
+)
+
+genrule(
+    name = "visualizations",
+    out = "visualizations.zip",
+    cmd = "$(exe :add_to_zip) " +
+          "-z $(location :visualizations_src) " +
+          "-o ${OUT} " +
+          "-a $(location //software/protobuf:pando_pb2__ext__py) arvr/pando_pb2.py " +
+          "-a $(location //software/labgraph_nodes/contrast_calcs:contrast_calcs#shared,windows-x86_64) contrast_calcs.pyd " +
+          "-a $(location //third-party/pythonlibs/labgraph:labgraph) labgraph/$BASENAME " +
+          "-a $(location //software/python/visualizations:readme) README.md",
+)

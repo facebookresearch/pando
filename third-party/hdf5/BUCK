@@ -1,0 +1,90 @@
+COMPATIBLE_WITH = [
+    "config//:windows-x86_64",
+    "config//:linux-x86_64",
+]
+
+COMPILER_FLAGS = select({
+    "config//toolchain:msvc": [
+        "/wd4703",
+        "/wd4146",
+    ],
+    "DEFAULT": [
+        "-Wno-c++-compat",
+        "-Wno-format-nonliteral",
+    ],
+})
+
+LINKER_FLAGS = select({
+    "config//toolchain:msvc": [
+        "ws2_32.lib",
+    ],
+    "DEFAULT": [
+        "-lm",
+        "-ldl",
+    ],
+})
+
+INCLUDE_DIRECTORIES = \
+    ["hdf5/src"] + \
+    select({
+        "config//:windows-x86_64": ["platform_headers_windows-x86_64"],
+        "config//:linux-x86_64": ["platform_headers_linux-x86_64"],
+    })
+
+RAW_HEADERS = \
+    glob(["hdf5/src/*.h"]) + \
+    select({
+        "config//:windows-x86_64": glob(["platform_headers_windows-x86_64/*.h"]),
+        "config//:linux-x86_64": glob(["platform_headers_linux-x86_64/*.h"]),
+    })
+
+cxx_binary(
+    name = "H5detect",
+    compatible_with = COMPATIBLE_WITH,
+    srcs = ["hdf5/src/H5detect.c"],
+    include_directories = INCLUDE_DIRECTORIES,
+    raw_headers = RAW_HEADERS,
+    compiler_flags = COMPILER_FLAGS,
+    linker_flags = LINKER_FLAGS,
+)
+
+genrule(
+    name = "H5Tinit",
+    compatible_with = COMPATIBLE_WITH,
+    out = "H5Tinit.c",
+    cmd = "$(exe :H5detect) > $OUT",
+)
+
+cxx_library(
+    name = "hdf5",
+    preferred_linkage = "static",
+    compatible_with = COMPATIBLE_WITH,
+    srcs = glob(
+        [
+            "hdf5/src/*.c",
+        ],
+        exclude = [
+            "hdf5/src/H5make_libsettings.c",
+            "hdf5/src/H5detect.c",
+        ],
+    ) + [
+        ":H5Tinit",
+        "H5lib_settings.c",
+    ],
+    public_include_directories = INCLUDE_DIRECTORIES,
+    raw_headers = RAW_HEADERS,
+    compiler_flags = COMPILER_FLAGS,
+    exported_linker_flags = LINKER_FLAGS,
+    visibility = ["PUBLIC"],
+)
+
+cxx_library(
+    name = "hdf5_cpp",
+    preferred_linkage = "static",
+    compatible_with = COMPATIBLE_WITH,
+    srcs = glob(["hdf5/c++/src/*.cpp"]),
+    public_include_directories = ["hdf5/c++/src"],
+    raw_headers = glob(["hdf5/c++/src/*.h"]),
+    exported_deps = [":hdf5"],
+    visibility = ["PUBLIC"],
+)

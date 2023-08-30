@@ -1,0 +1,4 @@
+--config-file=//mode/linux/xilinx-aarch64/cxx.bcfg
+--config-file=//mode/linux/x86_64/cxx.bcfg
+--target-platforms=config//platform:linux-xilinx-aarch64-debug
+--config=cxx.default_platform=linux-xilinx-aarch64-debug

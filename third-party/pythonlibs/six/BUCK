@@ -1,0 +1,20 @@
+http_file(
+    name = "six-1.16.0-py2.py3-none-any.whl",
+    sha256 = "8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254",
+    urls = ["https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl"],
+)
+
+prebuilt_python_library(
+    name = "six",
+    binary_src = ":six-1.16.0-py2.py3-none-any.whl",
+    visibility = ["PUBLIC"],
+)
+
+python_test(
+    name = "six_import_test",
+    srcs = [
+        "test_default.py",
+    ],
+    visibility = ["PUBLIC"],
+    deps = [":six"],
+)

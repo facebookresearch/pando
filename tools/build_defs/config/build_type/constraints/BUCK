@@ -1,0 +1,28 @@
+constraint_setting(
+    name = "build_type",
+    visibility = ["PUBLIC"],
+)
+
+constraint_value(
+    name = "release",
+    constraint_setting = ":build_type",
+    visibility = ["PUBLIC"],
+)
+
+constraint_value(
+    name = "rel_with_deb_info",
+    constraint_setting = ":build_type",
+    visibility = ["PUBLIC"],
+)
+
+constraint_value(
+    name = "debug",
+    constraint_setting = ":build_type",
+    visibility = ["PUBLIC"],
+)
+
+constraint_value(
+    name = "docs",
+    constraint_setting = ":build_type",
+    visibility = ["PUBLIC"],
+)

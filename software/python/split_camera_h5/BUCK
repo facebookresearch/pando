@@ -1,0 +1,28 @@
+python_binary(
+    name = "split_camera_h5",
+    main_module = "split_camera_h5.split_camera_h5",
+    visibility = [
+        "PUBLIC",
+    ],
+    deps = [
+        ":split_camera_h5_library",
+    ],
+    zip_safe = False,
+)
+
+python_library(
+    name = "split_camera_h5_library",
+    base_module = "split_camera_h5",
+    srcs = [
+        "split_camera_h5.py",
+    ],
+    visibility = [
+        "PUBLIC",
+    ],
+    deps = [
+        "//third-party/pythonlibs/numpy:numpy",
+        "//third-party/pythonlibs/h5py:h5py",
+        "//third-party/pythonlibs/six:six",
+        "//third-party/pythonlibs/cached-property:cached-property",
+    ],
+)

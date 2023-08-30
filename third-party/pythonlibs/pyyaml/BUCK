@@ -1,0 +1,35 @@
+http_file(
+    name = "PyYAML-5.4.1-cp36-cp36m-win_amd64.whl",
+    sha256 = "e4fac90784481d221a8e4b1162afa7c47ed953be40d31ab4629ae917510051df",
+    urls = ["https://files.pythonhosted.org/packages/30/d0/8699372d1c22202e80b160527f8412d98a5edfefeefac056df3997e84801/PyYAML-5.4.1-cp36-cp36m-win_amd64.whl"],
+)
+
+http_file(
+    name = "PyYAML-5.4.1-cp36-cp36m-manylinux1_x86_64.whl",
+    sha256 = "4e0583d24c881e14342eaf4ec5fbc97f934b999a6828693a99157fde912540cc",
+    urls = ["https://files.pythonhosted.org/packages/7a/5b/bc0b5ab38247bba158504a410112b6c03f153c652734ece1849749e5f518/PyYAML-5.4.1-cp36-cp36m-manylinux1_x86_64.whl"],
+)
+
+prebuilt_python_library(
+    name = "pyyaml",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//:linux-x86_64",
+    ],
+    binary_src = select({
+        "config//:windows-x86_64": ":PyYAML-5.4.1-cp36-cp36m-win_amd64.whl",
+        "config//:linux-x86_64": ":PyYAML-5.4.1-cp36-cp36m-manylinux1_x86_64.whl",
+    }),
+    visibility = ["PUBLIC"],
+)
+
+python_test(
+    name = "pyyaml_import_test",
+    srcs = [
+        "pyyaml_import_test.py",
+    ],
+    visibility = ["PUBLIC"],
+    deps = [
+        ":pyyaml",
+    ],
+)

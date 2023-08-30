@@ -1,0 +1,268 @@
+ConfigVersion: "1.6.0"
+Instrument: Kite 1.3.2
+
+#########################
+# System Configurations #
+#########################
+
+# source assembly
+
+source_assembly:
+  laser: &laser1
+      model: Calmar MLL
+      repetition:
+        value: 80.0
+        unit: MHz
+      wavelength:
+        value: 780.0
+        unit: nm
+      spectral_width:
+        value: 17.0
+        unit: nm
+      pulse_width:
+        value: null
+        unit: null
+      pump_current:
+        value: 801.0
+        unit: mA
+
+  optical_power:
+    split: 0.99 # How much of the power goes to the participant
+    Ptap:
+      value: 102
+      unit: uW
+    POSW2:
+      value: 17.3 # power measured on the switch port 2
+      unit: mW
+    range:
+      value: 1 # power meter measurement range
+      unit: mW
+    bit_depth: 16
+    output_max:   # maximum voltage output from the power meter
+      value: 10
+      units: V
+
+# fibers
+fibers:
+  source_fibers: &SOURCE_FIBERS
+    length:
+      value: 4.0
+      unit: meter
+    model: 780HP
+    ferrule_version: null
+
+  detector_fibers_1: &DETECTOR_FIBERS1
+    length:
+      value: 4.0
+      unit: meter
+    model: FG600AEA
+    ferrule_version: null
+
+  detector_fibers_2: &DETECTOR_FIBERS2
+    length:
+      value: 4.0
+      unit: meter
+    model: OFS GRIN 400 um
+    ferrule_version: null
+
+
+# detector assembly
+
+detector_assembly_1: &DETECTOR1
+  model: PMA50
+  filter_assembly: rev2
+
+detector_assembly_2: &DETECTOR2
+  model: PMA42
+  filter_assembly: rev2
+
+# time tagger device
+TDC:
+  model: MultiHarp
+  firmware_version: FW 0.18 - GW 1.3
+
+# IRF
+irf:
+  irf_recording: 697954841158747
+  ch0:
+    latency: null
+    jitter: null
+  ch1:
+    latency: null
+    jitter: null
+  ch2:
+    latency: null
+    jitter: null
+  ch3:
+    latency: null
+    jitter: null
+  ch4:
+    latency: null
+    jitter: null
+  ch5:
+    latency: null
+    jitter: null
+  ch6:
+    latency: null
+    jitter: null
+  ch7:
+    latency: null
+    jitter: null
+
+
+# cap assembly
+
+common_canister_properties: &COMMON_CANISTER_PROPERTIES
+  ReferencePoint: "Center of canister" # Required field
+  Orientation: "Positive y is side A" # Required field
+  Ordering: ["Polar", "Lexicographic"] # Required field
+  Coordinates: [ # Required field
+     [   0.00000000000,   0.00000000000,   0.00000000000], #                         Side A
+     [   8.93724231900,   4.48616760000,   0.00000000000], #             ──────────────────────────────
+     [   3.14738511700,   9.49178418000,   0.00000000000], #           ╱                                ╲
+     [  -4.48616760000,   8.93724231900,   0.00000000000], #          ╱    *19             *18           ╲
+     [  -9.49178418000,   3.14738511700,   0.00000000000], #         ╱                                    ╲
+     [  -8.93724231900,  -4.48616760000,   0.00000000000], #        ╱                                      ╲
+     [  -3.14738511700,  -9.49178418000,   0.00000000000], #       ╱           *11        *10               ╲
+     [   4.48616760000,  -8.93724231900,   0.00000000000], #      ╱                                          ╲
+     [   9.49178418000,  -3.14738511700,   0.00000000000], #     ╱                                            ╲
+     [  17.87448463800,   8.97233520000,   0.00000000000], #    ╱                 *3     *2              *17   ╲
+     [   6.29477023500,  18.98356836000,   0.00000000000], #   ╱                                    *9          ╲
+     [  -8.97233520000,  17.87448463800,   0.00000000000], #  ╱   *20    *12   *4             *1                 ╲
+     [ -18.98356836000,   6.29477023500,   0.00000000000], #  ╲                        *0                        ╱
+     [ -17.87448463800,  -8.97233520000,   0.00000000000], #   ╲                              *8                ╱
+     [  -6.29477023500, -18.98356836000,   0.00000000000], #    ╲               *5                 *16         ╱
+     [   8.97233520000, -17.87448463800,   0.00000000000], #     ╲                   *6    *7                 ╱
+     [  18.98356836000,  -6.29477023500,   0.00000000000], #      ╲         *13                          *24 ╱
+     [  26.81172695700,  13.45850280000,   0.00000000000], #       ╲                                        ╱
+     [   9.44215535200,  28.47535254000,   0.00000000000], #        ╲   *21         *14      *15           ╱
+     [ -13.45850280000,  26.81172695700,   0.00000000000], #         ╲                                    ╱
+     [ -28.47535254000,   9.44215535200,   0.00000000000], #          ╲                                  ╱
+     [ -26.81172695700, -13.45850280000,   0.00000000000], #           ╲           *22         *23      ╱
+     [  -9.44215535200, -28.47535254000,   0.00000000000], #            ╲                              ╱
+     [  13.45850280000, -26.81172695700,   0.00000000000], #              ────────────────────────────
+     [  28.47535254000,  -9.44215535200,   0.00000000000], #                      Side B (BOA)
+  ]
+
+DeviceName: "kite1" # Required field
+Canisters: # Required field
+  - Name: "left" # Required field
+    << : *COMMON_CANISTER_PROPERTIES
+    Sources: # Required field
+        Wavelengths: # Required field
+            Red: 780.0
+        # Each wavelength must appear under `Sources`
+        Red: [
+          {
+            source channel number: 0,
+            coordinate: 0, # Required field, must be a natural number.
+            fiber : *SOURCE_FIBERS,
+            laser : *laser1,
+            Pin: {
+            value: 9.94,
+            unit: mW,
+                 },
+          },
+        ]
+
+    Detectors: [ # Required field
+      {
+        detector channel number: 0,
+        coordinate: 14, # Required field, must be a natural number.
+        fiber : *DETECTOR_FIBERS2,
+        detector : *DETECTOR1,
+      },
+      {
+        detector channel number: 1,
+        coordinate: 15, # Required field, must be a natural number.
+        fiber : *DETECTOR_FIBERS2,
+        detector : *DETECTOR1,
+      },
+      {
+        detector channel number: 2,
+        coordinate: 16, # Required field, must be a natural number.
+        fiber : *DETECTOR_FIBERS2,
+        detector : *DETECTOR1,
+      },
+      {
+        detector channel number: 3,
+        coordinate: 9, # Required field, must be a natural number.
+        fiber : *DETECTOR_FIBERS2,
+        detector : *DETECTOR1,
+      },
+    ]
+
+  - Name: "right" # Required field
+    << : *COMMON_CANISTER_PROPERTIES
+    Sources: # Required field
+        Wavelengths: # Required field
+            Red: 780.0
+        # Each wavelength must appear under `Sources`
+        Red: [
+          {
+            source channel number: 0,
+            coordinate: 0, # Required field, must be a natural number.
+            fiber : *SOURCE_FIBERS,
+            laser : *laser1,
+              Pin: {
+            value: 9.94,
+            unit: mW,
+                 },
+          },
+        ]
+
+    Detectors: [ # Required field
+      {
+        detector channel number: 4,
+        coordinate: 14, # Required field, must be a natural number.
+        fiber : *DETECTOR_FIBERS2,
+        detector : *DETECTOR1,
+      },
+      {
+        detector channel number: 5,
+        coordinate: 15, # Required field, must be a natural number.
+        fiber : *DETECTOR_FIBERS2,
+        detector : *DETECTOR1,
+      },
+      {
+        detector channel number: 6,
+        coordinate: 16, # Required field, must be a natural number.
+        fiber : *DETECTOR_FIBERS2,
+        detector : *DETECTOR1,
+      },
+      {
+        detector channel number: 7,
+        coordinate: 9, # Required field, must be a natural number.
+        fiber : *DETECTOR_FIBERS2,
+        detector : *DETECTOR1,
+      },
+    ]
+
+# peripheral
+
+peripheral:
+  pulse_ox: iWorx PO2-100B
+  respiration_belt: UFI 1132BNC
+  IMU: TDK MPU6000
+  optical_power_meter: Thorlabs PM320E
+  keyboard:
+
+# software
+software:
+  Igb7:
+    version: null
+  Kitesw:
+    version: null
+  Pando:
+    version: 11132020
+  syncbox FW:
+    version: null
+
+
+#########################
+# Experiment Parameters #
+#########################
+
+protocol:
+  hemisphere: left
+  type: squeezing_variable_duration

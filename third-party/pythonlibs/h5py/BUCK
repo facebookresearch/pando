@@ -1,0 +1,22 @@
+http_file(
+    name = "h5py-3.1.0-cp36-cp36m-win_amd64.whl",
+    sha256 = "2e37352ddfcf9d77a2a47f7c8f7e125c6d20cc06c2995edeb7be222d4e152636",
+    urls = ["https://files.pythonhosted.org/packages/35/39/ceabe8fa912cb27ec9a0064fe01c1fde2f8b43e9f7e506207db0a0dcea0a/h5py-3.1.0-cp36-cp36m-win_amd64.whl"],
+)
+
+prebuilt_python_library(
+    name = "h5py",
+    binary_src = ":h5py-3.1.0-cp36-cp36m-win_amd64.whl",
+    visibility = ["PUBLIC"],
+)
+
+python_test(
+    name = "h5py_import_test",
+    srcs = [
+        "h5py_import_test.py",
+    ],
+    visibility = ["PUBLIC"],
+    deps = [
+        ":h5py",
+    ],
+)

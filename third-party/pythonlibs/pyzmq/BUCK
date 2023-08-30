@@ -1,0 +1,35 @@
+http_file(
+    name = "pyzmq-22.1.0-cp36-cp36m-win_amd64.whl",
+    sha256 = "a1c77796f395804d6002ff56a6a8168c1f98579896897ad7e35665a9b4a9eec5",
+    urls = ["https://files.pythonhosted.org/packages/47/51/bac73247926e8fbd639eb0d40484894e66c3a1e0217788b0317a0a3b2eac/pyzmq-22.1.0-cp36-cp36m-win_amd64.whl"],
+)
+
+http_file(
+    name = "pyzmq-22.1.0-cp36-cp36m-manylinux1_x86_64.whl",
+    sha256 = "c4674004ed64685a38bee222cd75afa769424ec603f9329f0dd4777138337f48",
+    urls = ["https://files.pythonhosted.org/packages/4b/87/88a87fa6f8a711dc4b56600d9e9ab61e0283607fd3b97376819059b3a9cb/pyzmq-22.1.0-cp36-cp36m-manylinux1_x86_64.whl"],
+)
+
+prebuilt_python_library(
+    name = "pyzmq",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//:linux-x86_64",
+    ],
+    binary_src = select({
+        "config//:windows-x86_64": ":pyzmq-22.1.0-cp36-cp36m-win_amd64.whl",
+        "config//:linux-x86_64": ":pyzmq-22.1.0-cp36-cp36m-manylinux1_x86_64.whl",
+    }),
+    visibility = ["PUBLIC"],
+)
+
+python_test(
+    name = "pyzmq_import_test",
+    srcs = [
+        "pyzmq_import_test.py",
+    ],
+    visibility = ["PUBLIC"],
+    deps = [
+        ":pyzmq",
+    ],
+)

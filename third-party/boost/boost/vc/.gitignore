@@ -1,0 +1,6 @@
+# vs build stuff
+x64/
+x86/
+Debug/
+Development/
+Release/

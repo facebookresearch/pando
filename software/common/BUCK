@@ -1,0 +1,24 @@
+cxx_library(
+    name = "common",
+    preferred_linkage = "static",
+    srcs = native.glob([
+        "src/*.cpp",
+    ]),
+    include_directories = [
+        "src",
+    ],
+    public_include_directories = [
+        "include",
+    ],
+    raw_headers = native.glob([
+        "src/*.h",
+        "include/*.h",
+    ]),
+    visibility = ["PUBLIC"],
+    deps = [
+        "//third-party/spdlog:spdlog",
+        "//third-party/boost:boost",
+        "//third-party/zmq:cppzmq",
+        "//third-party/protobuf:protobuf",
+    ],
+)

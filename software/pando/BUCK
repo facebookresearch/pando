@@ -1,0 +1,457 @@
+cxx_library(
+    name = "pando",
+    preferred_linkage = "static",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//build_type:docs",
+    ],
+    compiler_flags = select({
+        "config//toolchain:msvc": [
+            "/arch:AVX2",
+            "/wd4250",
+        ],
+        "DEFAULT": [
+        ],
+    }),
+    srcs = native.glob([
+        "src/*.cpp",
+    ]),
+    include_directories = [
+        "src",
+    ],
+    public_include_directories = [
+        "include",
+    ],
+    raw_headers = native.glob([
+        "src/*.h",
+        "include/*.h",
+    ]),
+    visibility = ["PUBLIC"],
+    deps = [
+        "//software/common:common",
+        "//software/protobuf:pando_protobuf",
+        "//software/protobuf:pandoboxd_rpc",
+        "//third-party/multiharp-mhlib:multiharp-mhlib",
+        "//third-party/hdf5:hdf5_cpp",
+        "//third-party/hydraharp-hhlib:hydraharp-hhlib",
+        "//third-party/ph300-phlib:ph300-phlib",
+        "//third-party/pf32_api:pf32_correlator_api",
+        "//third-party/zmq:cppzmq",
+        "//third-party/pylon:pylon",
+        "//third-party/dcamsdk4:dcamsdk4",
+        "//third-party/silicon_software_sdk:fglib",
+        "//third-party/protobuf:protobuf",
+    ],
+)
+
+cxx_test(
+    name = "hdf5_table_test",
+    srcs = [
+        "test/hdf5_table_test.cpp",
+        "src/mutex.cpp",
+    ],
+    raw_headers = [
+        "src/hdf5_table.h",
+        "src/mutex.h",
+    ],
+    include_directories = [
+        "include",
+        "src",
+    ],
+    deps = [
+        "//software/common:common",
+        "//third-party/hdf5:hdf5_cpp",
+    ],
+)
+
+cxx_test(
+    name = "hdf5_comptype_accessor_test",
+    srcs = [
+        "test/hdf5_comptype_accessor_test.cpp",
+        "src/mutex.cpp",
+    ],
+    raw_headers = [
+        "src/hdf5_comptype_accessor.h",
+        "src/hdf5_comptype_field_descriptor.h",
+        "src/mutex.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+        "//third-party/hdf5:hdf5_cpp",
+    ],
+)
+
+cxx_test(
+    name = "hdf5_logger_test",
+    compatible_with = [
+        "config//:windows-x86_64",
+    ],
+    link_style = "shared",
+    srcs = [
+        "test/hdf5_logger_test.cpp",
+    ],
+    raw_headers = [
+        "src/hdf5_logger.h",
+        "src/hdf5_raw_logger.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+        ":pando",
+    ],
+)
+
+cxx_test(
+    name = "pf32_ll_test",
+    compatible_with = [
+        "config//:windows-x86_64",
+    ],
+    labels = [
+        "needs_hardware",
+    ],
+    link_style = "shared",
+    srcs = [
+        "test/pf32_ll_test.cpp",
+    ],
+    raw_headers = [
+        "src/pf32_ll_types.h",
+        "src/pf32_ll.h",
+        "src/pf32_acquisition.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+        ":pando",
+    ],
+)
+
+cxx_test(
+    name = "pf32_acquisition_g2_test",
+    compatible_with = [
+        "config//:windows-x86_64",
+    ],
+    labels = [
+        "needs_hardware",
+    ],
+    link_style = "shared",
+    compiler_flags = [
+        "/arch:AVX2",
+    ],
+    srcs = [
+        "test/pf32_acquisition_g2_test.cpp",
+        "src/pf32_acquisition_g2.cpp",
+        "src/worker.cpp",
+    ],
+    raw_headers = [
+        "src/pf32_ll_types.h",
+        "src/pf32_ll.h",
+        "src/pf32_acquisition_g2.h",
+        "src/storage_pool.h",
+        "src/types.h",
+        "src/worker.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+        "//software/common:common",
+        "//third-party/pf32_api:pf32_correlator_api",
+    ],
+)
+
+cxx_test(
+    name = "ring_buffer_test",
+    srcs = [
+        "test/ring_buffer_test.cpp",
+    ],
+    raw_headers = [
+        "src/ring_buffer.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+    ],
+)
+
+cxx_test(
+    name = "counter_test",
+    compatible_with = [
+        "config//:windows-x86_64",
+    ],
+    link_style = "shared",
+    srcs = [
+        "test/counter_test.cpp",
+    ],
+    raw_headers = [
+        "src/counter.h",
+        "src/types.h",
+        "src/histogram.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+        ":pando",
+    ],
+)
+cxx_test(
+    name = "pf32_test",
+    compatible_with = [
+        "config//:windows-x86_64",
+    ],
+    labels = [
+        "needs_hardware",
+    ],
+    link_style = "shared",
+    srcs = [
+        "test/pf32_test.cpp",
+    ],
+    raw_headers = [
+        "src/pf32_dcs.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+        ":pando",
+    ],
+)
+
+cxx_test(
+    name = "dtof_test",
+    srcs = [
+        "test/dtof_test.cpp",
+    ],
+    raw_headers = [
+        "src/dtof.h",
+        "src/types.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+    ],
+)
+
+cxx_test(
+    name = "worker_test",
+    compatible_with = [
+        "config//:windows-x86_64",
+    ],
+    link_style = "shared",
+    srcs = [
+        "test/worker_test.cpp",
+    ],
+    raw_headers = [
+        "src/worker.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+        ":pando",
+    ],
+)
+
+cxx_test(
+    name = "storage_pool_test",
+    srcs = [
+        "test/storage_pool_test.cpp",
+    ],
+    raw_headers = [
+        "src/storage_pool.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+    ],
+)
+
+cxx_test(
+    name = "time_shifter_test",
+    srcs = [
+        "test/time_shifter_test.cpp",
+    ],
+    raw_headers = [
+        "src/time_shifter.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+        "//software/common:common",
+    ],
+)
+
+cxx_test(
+    name = "h5_lock_adapter_test",
+    srcs = [
+        "src/mutex.cpp",
+        "test/h5_lock_adapter_test.cpp",
+    ],
+    raw_headers = [
+        "src/mutex.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+    ],
+)
+
+cxx_test(
+    name = "basler_a2_test",
+    compatible_with = [
+        "config//:windows-x86_64",
+    ],
+    labels = [
+        "needs_hardware",
+    ],
+    link_style = "shared",
+    srcs = [
+        "src/basler_a2.cpp",
+        "test/basler_a2_test.cpp",
+    ],
+    raw_headers = [
+        "src/basler_a2.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+        ":pando",
+    ],
+)
+
+cxx_test(
+    name = "orca_fusion_test",
+    compatible_with = [
+        "config//:windows-x86_64",
+    ],
+    labels = [
+        "needs_hardware",
+    ],
+    link_style = "shared",
+    srcs = [
+        "test/orca_fusion_test.cpp",
+    ],
+    raw_headers = [
+        "src/dcam_err.h",
+        "src/dcam_api.h",
+        "src/orca_fusion.h",
+        "src/pandoboxd_client.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+        ":pando",
+    ],
+)
+
+cxx_test(
+    name = "me5_framegrabber_test",
+    compatible_with = [
+        "config//:windows-x86_64",
+    ],
+    labels = [
+        "needs_hardware",
+    ],
+    link_style = "shared",
+    srcs = [
+        "test/me5_framegrabber_test.cpp",
+        "src/me5_framegrabber.cpp",
+        "src/worker.cpp",
+        "src/publisher.cpp",
+        "src/mutex.cpp",
+        "src/hdf5_image_logger.cpp",
+        "src/camera_frame_handler.cpp",
+    ],
+    raw_headers = [
+        "include/pando.h",
+        "src/device_interface.h",
+        "src/camera_frame_handler.h",
+        "src/me5_framegrabber.h",
+    ],
+    include_directories = [
+        "include",
+        "src",
+    ],
+    deps = [
+        "//software/common:common",
+        "//software/protobuf:pando_protobuf",
+        "//third-party/silicon_software_sdk:fglib",
+        "//third-party/fmt:fmt",
+        "//third-party/hdf5:hdf5_cpp",
+
+    ],
+)
+
+cxx_test(
+    name = "basler_aca2000_cl_test",
+    compatible_with = [
+        "config//:windows-x86_64",
+    ],
+    labels = [
+        "needs_hardware",
+    ],
+    link_style = "shared",
+    srcs = [
+        "test/basler_aca2000_cl_test.cpp",
+        "src/basler_aca2000_cl.cpp",
+        "src/me5_framegrabber.cpp",
+        "src/worker.cpp",
+        "src/publisher.cpp",
+        "src/mutex.cpp",
+        "src/hdf5_image_logger.cpp",
+        "src/camera_frame_handler.cpp",
+    ],
+    raw_headers = [
+        "include/pando.h",
+        "src/device_interface.h",
+        "src/camera_frame_handler.h",
+        "src/me5_framegrabber.h",
+    ],
+    include_directories = [
+        "include",
+        "src",
+    ],
+    deps = [
+        "//software/common:common",
+        "//software/protobuf:pando_protobuf",
+        "//third-party/silicon_software_sdk:fglib",
+        "//third-party/pylon:pylon",
+        "//third-party/fmt:fmt",
+        "//third-party/hdf5:hdf5_cpp",
+
+    ],
+)
+
+cxx_test(
+    name = "basler_boost_test",
+    compatible_with = [
+        "config//:windows-x86_64",
+    ],
+    labels = [
+        "needs_hardware",
+    ],
+    link_style = "shared",
+    srcs = [
+        "test/basler_boost_test.cpp",
+    ],
+    raw_headers = [
+        "src/basler_a2.h",
+    ],
+    include_directories = [
+        "src",
+    ],
+    deps = [
+        ":pando",
+    ],
+)

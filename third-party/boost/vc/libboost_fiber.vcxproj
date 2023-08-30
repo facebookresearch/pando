@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+	<ProjectConfiguration Include="Development|x64">
+      <Configuration>Development</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Globals">
+    <RootNamespace>libboost_fiber</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)'=='x64'">
+    <TargetName>$(ProjectName)-vc141-mt-x64-1_69</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>$(ProjectName)-vc141-mt-gd-x64-1_69</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)'=='Win32'">
+    <TargetName>$(ProjectName)-vc141-mt-x32-1_69</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>$(ProjectName)-vc141-mt-gd-x32-1_69</TargetName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+    <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'">
+    <ClCompile>
+    <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+    <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+
+	<ClCompile>
+		<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)\..\boost\;$(MSBuildThisFileDirectory)\..\boost\libs\;$(MSBuildThisFileDirectory)\..\..\..\;</AdditionalIncludeDirectories>
+		</ClCompile>
+		</ItemDefinitionGroup>
+  <ItemGroup>
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\barrier.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\condition_variable.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\context.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\fiber.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\future.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\mutex.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\properties.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\recursive_mutex.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\recursive_timed_mutex.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\scheduler.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\timed_mutex.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\algo\algorithm.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\algo\round_robin.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\algo\shared_work.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\algo\work_stealing.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\pin_thread.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\topology.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\aix\pin_thread.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\aix\topology.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\algo\work_stealing.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\freebsd\pin_thread.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\freebsd\topology.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\hpux\pin_thread.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\hpux\topology.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\linux\pin_thread.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\linux\topology.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\solaris\pin_thread.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\solaris\topology.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\windows\pin_thread.cpp" />
+        <ClCompile Include="$(MSBuildThisFileDirectory)\..\boost\libs\fiber\src\.\numa\windows\topology.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

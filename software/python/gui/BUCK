@@ -1,0 +1,19 @@
+python_binary(
+    name = "pando",
+    main_module = "gui.pando.pando",
+    visibility = ["PUBLIC"],
+    deps = [
+        "//software/python/gui/pando:pando_library",
+    ],
+    zip_safe = False,
+)
+
+python_binary(
+    name = "camera_viewer",
+    main_module = "gui.camera_viewer.camera_viewer",
+    visibility = ["PUBLIC"],
+    deps = [
+        "//software/python/gui/camera_viewer:camera_viewer_library",
+    ],
+    zip_safe = False,
+)

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+docker run \
+       -t \
+       --init \
+       --rm \
+       -v $(pwd):/home/user/pando_box-platform \
+       -w /home/user/pando_box-platform \
+       registry.gitlab.leaflabs.com/bldg8/pando_box-platform/icarus \
+       $@

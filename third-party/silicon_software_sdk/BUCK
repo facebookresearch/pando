@@ -1,0 +1,47 @@
+cxx_library(
+    name = "fglib_headers_win64",
+    public_include_directories = ["win-x86_64/include"],
+    raw_headers = [
+        "win-x86_64/include/fgrab_define.h",
+        "win-x86_64/include/fgrab_prototyp.h",
+        "win-x86_64/include/fgrab_struct.h",
+        "win-x86_64/include/SisoDisplay.h",
+        "win-x86_64/include/os_funcs.h",
+        "win-x86_64/include/os_type.h",
+        "win-x86_64/include/sisoboards.h",
+    ],
+)
+
+prebuilt_cxx_library(
+    name = "fglib",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//build_type:docs",
+    ],
+    static_lib = "win-x86_64/lib/fglib5.lib",
+    exported_deps = [":fglib_headers_win64"],
+    exported_linker_flags = ["delayimp.lib", "/DELAYLOAD:fglib5.dll"],
+    preferred_linkage = "static",
+    visibility = ["PUBLIC"],
+)
+
+cxx_library(
+    name = "clersis_headers_win64",
+    public_include_directories = ["win-x86_64/include"],
+    raw_headers = [
+        "win-x86_64/include/clser.h",
+    ],
+)
+
+prebuilt_cxx_library(
+    name = "clsersis",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//build_type:docs",
+    ],
+    static_lib = "win-x86_64/lib/clsersis.lib",
+    exported_deps = [":clersis_headers_win64"],
+    exported_linker_flags = ["delayimp.lib", "/DELAYLOAD:clsersis.dll"],
+    preferred_linkage = "static",
+    visibility = ["PUBLIC"],
+)

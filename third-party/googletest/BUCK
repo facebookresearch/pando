@@ -1,0 +1,63 @@
+# Library that defines the FRIEND_TEST macro.
+cxx_library(
+    name = "gtest_prod",
+    preferred_linkage = "static",
+    public_include_directories = ["googletest/googletest/include"],
+    raw_headers = ["googletest/googletest/include/gtest/gtest_prod.h"],
+    visibility = ["PUBLIC"],
+)
+
+# Google Test including Google Mock
+cxx_library(
+    name = "gtest",
+    preferred_linkage = "static",
+    srcs = glob(
+        [
+            "googletest/googletest/src/*.cc",
+            "googletest/googlemock/src/*.cc",
+        ],
+        exclude = [
+            "googletest/googletest/src/gtest-all.cc",
+            "googletest/googletest/src/gtest_main.cc",
+            "googletest/googlemock/src/gmock-all.cc",
+            "googletest/googlemock/src/gmock_main.cc",
+        ],
+    ),
+    include_directories = [
+        "googletest/googletest/src",
+    ],
+    public_include_directories = [
+        "googletest/googlemock",
+        "googletest/googlemock/include",
+        "googletest/googletest",
+        "googletest/googletest/include",
+    ],
+    raw_headers = glob([
+        "googletest/googletest/src/*.h",
+        "googletest/googletest/include/gtest/**/*.h",
+        "googletest/googlemock/include/gmock/**/*.h",
+        "googletest/googletest/include/gtest/*.h",
+        "googletest/googlemock/include/gmock/*.h",
+    ]),
+    compiler_flags = select({
+        "config//os:linux": ["-pthread"],
+        "DEFAULT": [],
+    }),
+    exported_linker_flags = select({
+        "config//os:linux": ["-pthread"],
+        "DEFAULT": [],
+    }),
+    visibility = ["PUBLIC"],
+)
+
+cxx_library(
+    name = "gtest_main",
+    preferred_linkage = "static",
+    srcs = ["googletest/googlemock/src/gmock_main.cc"],
+    exported_linker_flags = select({
+        "config//toolchain:msvc": ["/SUBSYSTEM:CONSOLE"],
+        "DEFAULT": [],
+    }),
+    deps = [":gtest"],
+    visibility = ["PUBLIC"],
+)
