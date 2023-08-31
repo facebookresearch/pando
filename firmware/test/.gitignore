@@ -1,0 +1,4 @@
+__pycache__
+*_tb
+*.vcd
+test_results.xml

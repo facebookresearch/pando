@@ -1,0 +1,11 @@
+cxx_library(
+    name = "fmt",
+    preferred_linkage = "static",
+    srcs = [
+        "fmt/src/format.cc",
+        "fmt/src/os.cc",
+    ],
+    public_include_directories = ["fmt/include"],
+    raw_headers = glob(["fmt/include/fmt/*.h"]),
+    visibility = ["PUBLIC"],
+)

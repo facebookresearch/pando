@@ -1,0 +1,11 @@
+http_file(
+    name = "pyvcd-0.2.4-py2.py3-none-any.whl",
+    sha256 = "c40b0e586a74cddaf82e6989f0168ae7f9b4f182a9a106a0da9df0d11a9c6b3b",
+    urls = ["https://files.pythonhosted.org/packages/3f/45/844732ef3fa916478381c8a71cca2215c391e32fc5c09b860e34737696ba/pyvcd-0.2.4-py2.py3-none-any.whl"],
+)
+
+prebuilt_python_library(
+    name = "pyvcd",
+    binary_src = ":pyvcd-0.2.4-py2.py3-none-any.whl",
+    visibility = ["PUBLIC"],
+)

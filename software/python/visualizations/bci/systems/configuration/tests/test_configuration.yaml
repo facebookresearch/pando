@@ -1,0 +1,111 @@
+ConfigVersion: "1.1.0"
+DeviceName: "test"
+Canisters:
+    -   Name: "Test0"
+        Coordinates: [
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [1.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0],
+            [1.0, 0.0, 1.0],
+            [0.0, 1.0, 1.0],
+            [1.0, 1.0, 1.0],
+        ]
+        Sources:
+            Wavelengths:
+                Red: 50.0
+                Infrared: 100.0
+            Red: [
+                {coordinate: 0},
+                {coordinate: 1},
+                {coordinate: 2},
+                {coordinate: 3},
+                {coordinate: 4},
+                {coordinate: 5},
+                {coordinate: 6},
+                {coordinate: 7},
+                {coordinate: 0},
+            ]
+            Infrared: [
+                {coordinate: 3},
+                {coordinate: 2},
+                {coordinate: 1},
+                {coordinate: 0},
+                {coordinate: 0},
+                {coordinate: 1},
+                {coordinate: 2},
+                {coordinate: 3},
+            ]
+        Detectors: [
+            {coordinate: 0},
+            {coordinate: 1},
+            {coordinate: 2},
+            {coordinate: 3},
+            {coordinate: 4},
+            {coordinate: 5},
+            {coordinate: 6},
+            {coordinate: 7},
+        ]
+    -   Name: "Test1"
+        Transformation:
+            # Homogeneous coordinates affine transformation
+            # http://graphics.cs.cmu.edu/nsp/course/15-462/Spring04/slides/04-transform.pdf
+            AffineMatrix: [
+                [0.0, -1.0, 0.0, 100.0],
+                [1.0, 0.0, 0.0, 0.0],
+                [0.0, 0.0, 1.0, 0.0],
+                [0.0, 0.0, 0.0, 1.0],
+            ]
+        Coordinates: [
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [1.0, 1.0, 0.0],
+        ]
+        Sources:
+            Wavelengths:
+                Red: 50.0
+            Red: [
+                {coordinate: 0},
+                {coordinate: 1},
+                {coordinate: 2},
+                {coordinate: 3},
+            ]
+        Detectors: [
+            {coordinate: 0},
+            {coordinate: 1},
+            {coordinate: 2},
+            {coordinate: 3},
+        ]
+    -   Name: "Test2"
+        Transformation:
+            # Euler angles transformation
+            # https://en.wikipedia.org/wiki/Euler_angles
+            # Rotations are applied in ZYX order first,
+            # then translation is applied.
+            EulerAngles:
+                Units: "degrees"
+                Translation: [100.0, 0.0, 0.0]
+                Rotation: [0.0, 0.0, 90.0]
+        Coordinates: [
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [1.0, 1.0, 0.0],
+        ]
+        Sources:
+            Wavelengths:
+                Red: 50.0
+            Red: [
+                {coordinate: 0},
+                {coordinate: 1},
+                {coordinate: 2},
+                {coordinate: 3},
+            ]
+        Detectors: [
+            {coordinate: 0},
+            {coordinate: 1},
+            {coordinate: 2},
+            {coordinate: 3},
+        ]

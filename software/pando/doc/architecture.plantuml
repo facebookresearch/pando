@@ -1,0 +1,250 @@
+@startuml
+
+floating note
+ These diagrams outline the architecture of Pando as it pertains to PicoQuant devices (HydraHarp, PicoHarp, and MultiHarp).
+ The focus is on data flow from its orign at the device to its destination at the ZMQ PUB socket. HDF5 logging is not covered.
+end note
+
+partition "**Thread** RealHydraHarpBase::Acquire(), see hydra_harp.h" {
+    note left
+        This thread acquires records from the HydraHarp.
+        PicoHarp & MultiHarp versions are identical.
+    end note
+
+    :Thread Begin;
+    :StartMeas();
+    while (Pando Experiment Running?) is (yes)
+        if ( GetFlags() & FLAG_FIFOFULL ) then (yes)
+            :StopMeas();
+            :throw "Device FIFO overflowed" exception;
+            detach
+        else (no)
+
+            if(Previously published buffer Consumed?) then (yes)
+                :Publish current buffer;
+                note
+                    Buffer will be consumed by
+                    **Thread** DeviceBase::Run() inside
+                    **Function** XHarpProcBase::UpdateRawData()
+                end note
+            endif
+
+            if(Current Buffer contains > 20*1024*1024 records?) then (yes)
+                :throw "Software FIFO overflowed" exception;
+                detach
+            else (no)
+
+
+                :ReadFifo()
+                ----
+                Append new records to current buffer;
+            endif
+        endif
+    end while (no)
+    :StopMeas();
+    :Thread Finish;
+    detach
+}
+
+
+partition "**Thread** DeviceBase::Run(), see device_base.h" {
+    floating note
+        This thread parses records into micro & macro times.
+        It then dispatches them to DeviceBase::Process()
+        for asynchronous processing.
+
+        Notably, this is where segmentation of timestamps
+        into discrete integration periods happens.
+    end note
+
+    :Thread Begin;
+    :Send ZMQ "Start" event;
+    while (Pando Experiment Running?) is (yes)
+        :Check if config has changed;
+        note
+        A subset of config parameters are updatable
+        during the experiment, namely
+        1. Integration periods (g2, DTOF, CR, and CRi)
+        2. CRi offset & width (ie. the ROI)
+        end note
+
+        :DeviceBase::UpdateRawData();
+        note
+        Other device (PicoHarp, PF32, HDF5 mock 
+        devices, etc.) are suppored through unique
+        implementations of DeviceBase::UpdateRawData.
+        end note
+
+        :Wait for previous asynchronous call
+        to DeviceBase::Process() to complete;
+
+        split
+        partition "Performed asynchronously using pando::Worker"{
+        :DeviceBase::Process();
+        detach
+        }
+        split again
+        end split
+
+    end while (no)
+    :Send ZMQ "Stop" event;
+    :Thread Finish;
+    detach
+}
+
+partition "**Function** XHarpProcBase::UpdateRawData(), see x_harp_proc_base.h"{
+    floating note
+        This is the implementation of DeviceBase::UpdateRawData for
+        PicoQuant Devices. It parses a stream of 32 bit "records" into
+        macro and micro times ("timestamps"). It also parses out marker
+        channel events.
+
+        The resulting timestamps are arranged as a vector of sequential
+        macrotimes and a vector of corresponding microtimes for each
+        channel.
+    end note
+    start
+    repeat
+
+    if(Consumed all records from current buffer?) then (yes)
+    while(New Buffer available?) is (no)
+        if(Slept for > 500ms during this call to UpdateRawData()?) then (yes)
+            :Throw "Are count rates zero?" exception;
+            detach
+        else (no)
+        endif; 
+        :Sleep for 50ms;
+    end while (yes)
+
+    :Get new buffer;
+    note
+        Buffer produced by
+        **Thread** RealHydraHarpBase::Acquire()
+    end note
+
+    else (no)
+    endif;
+
+    if(Previous call to ConsumeRecord() produced a timestamp?) then (yes)
+      :Append macrotime & microtime to vectors for corresponding channel;
+    else (no)
+    endif;
+
+    :XHarpBase::ConsumeRecord()
+    ----
+    Might produce a new macro/micro timestamp pair,
+    but not all records are timestamps.
+
+    There's a unique implementation of ConsumeRecord
+    for each device/mode pair (eg. HydraHarp T2).;
+
+    repeat while(New macrotime lies beyond current integration period?) is (no)
+    ->Current integration period complete;
+    :return;;
+    detach
+}
+
+partition "**Function** DeviceBase::Process(), see device_base.h"{
+    floating note
+        This thread is where we perform calculations on the timestamps
+        produced by the device, then protobuf the results and publish
+        them on the ZMQ PUB socket.
+
+        Individual calculation steps may be enabled or disabled. Some
+        processing steps can only be performed when the device is in T3
+        mode (ie. when microtimes are being produced). That isn't
+        captured here.
+
+    end note
+    start
+        fork
+        partition "Performed asynchronously using pando::Worker"{
+        :DeviceBase::ProtobufTimetags()
+        ----
+        Copy macrotimes & microtimes from all channels into a protobuf message;
+
+        :DeviceBase::ProtobufMarkers()
+        ----
+        Copy marker event timestamps into a protobuf message;        
+
+        }
+        fork again
+            partition "Parallelized over channels using std::transform"{
+            fork
+                :Calculate DTOF for first channel;
+                note left: DTOF calculated by **class** pando::DTOF, seedtof.h
+                :Calculate CRi for first channel;
+                note left: CRi calculated by **class** pando::ROICounter, see counter.h
+                :Calculate CR for first channel;
+                note left: CR calculated by **class** pando::TimestampCounter, see counter.h
+                :Calculate g2 for first channel;
+                note left: g2 calculated by **class** pando::Correlator, see correlator.h
+            fork again
+             :...;
+            fork again
+                :Calculate DTOF for last channel;
+                :Calculate CRi for last channel;
+                :Calculate CR for last channel;
+                :Calculate g2 for last channel;
+            end fork
+            }
+
+            if (DTOF integration period complete?) then (yes)
+            :DeviceBase::ProtobufDtofs()
+            ----
+            Copy DTOFs for all channels into a protobuf message;
+            else (no)
+            endif
+
+            if (CRi integration period complete?) then (yes)
+            :DeviceBase::ProtobufCris()
+            ----
+            Copy CRis for all channels into a protobuf message;
+            else (no)
+            endif
+
+            if (CR integration period complete?) then (yes)
+            :DeviceBase::ProtobufCountsFromTimetags()
+            ----
+            Copy count rates for all channels into a protobuf message;
+            else (no)
+            endif
+
+            :DeviceBase::ProtobufG2s()
+            ----
+            Copy g2s for all channels into a protobuf message;
+
+        end fork
+
+        split
+            :return;;
+            detach
+        split again
+
+        partition "Performed asynchronously using std::async"{
+            floating note
+                Use of std::async allows concurrent serialization of protobuf
+                messages produced by distinct integration periods.
+            end note
+            :Serialize each protobuf message produced above directly into a ZMQ message;
+        }
+
+        partition "Performed asynchronously using pando::Worker"{
+            floating note
+                Use of pando::Worker preserves ordring of ZMQ messages
+                produced by distinct integration periods and enforces
+                mutual exclusion on the ZMQ socket.
+            end note
+
+            :Send each ZMQ message produced above on the ZMQ PUB socket with appropriate topic string;
+        }
+        
+        
+        
+
+        detach
+        end split
+}
+
+
+@enduml

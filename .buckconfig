@@ -1,0 +1,17 @@
+[repositories]
+  config = tools/build_defs/config
+
+[cxx]
+  gtest_dep = //third-party/googletest:gtest_main
+
+[python]
+  interpreter = python3
+  pex_flags = "--python-shebang=/usr/bin/env python3"
+  package_style = inplace
+
+[parser]
+  default_build_file_syntax = SKYLARK
+  require_target_platform = true
+
+[download]
+  in_build = true

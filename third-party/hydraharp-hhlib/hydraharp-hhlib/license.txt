@@ -1,0 +1,48 @@
+HHLib Programming Library for HydraHarp 400 
+Version 3.0.0.2
+PicoQuant GmbH - March 2019
+
+
+Disclaimer
+
+PicoQuant GmbH disclaims all warranties with regard to this software 
+including all implied warranties of merchantability and fitness. 
+In no case shall PicoQuant GmbH be liable for any direct, indirect or 
+consequential damages or any material or immaterial damages whatsoever 
+resulting from loss of data, time or profits; arising from use, inability 
+to use, or performance of this software and associated documentation. 
+
+
+License and Copyright Notice
+
+With the HydraHarp hardware product you have purchased a license to use 
+the HHLib software. You have not purchased other rights to the software. 
+The software is protected by copyright and intellectual property laws. 
+You may not distribute the software to third parties or reverse engineer, 
+decompile or disassemble the software or part thereof. You may use and 
+modify demo code to create your own software. Original or modified demo 
+code may be re-distributed, provided that the original disclaimer and 
+copyright notes are not removed from it. Copyright of the manual and 
+on-line documentation belongs to PicoQuant GmbH. No parts of it may be 
+reproduced, translated or transferred to third parties without written 
+permission of PicoQuant GmbH. 
+
+
+Trademark Disclaimer
+
+HydraHarp, PicoHarp, TimeHarp and NanoHarp are registered trademarks 
+of PicoQuant GmbH. Other products and corporate names appearing in the 
+product manuals or in the online documentation may or may not be registered 
+trademarks or copyrights of their respective owners. They are used only 
+for identification or explanation and to the owner’s benefit, without 
+intent to infringe.
+
+
+Contact and Support
+
+PicoQuant GmbH
+Rudower Chaussee 29
+12489 Berlin, Germany
+Phone +49 30 1208820-0
+Fax   +49 30 1208820-90
+email info@picoquant.com

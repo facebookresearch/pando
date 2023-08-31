@@ -1,0 +1,25 @@
+cxx_library(
+    name = "pylon_headers_win64",
+    public_include_directories = ["windows/include"],
+    exported_preprocessor_flags = [
+        "/DPYLON_NO_AUTO_IMPLIB",
+        "/DGENICAM_NO_AUTO_IMPLIB",
+    ],
+    raw_headers = glob(["windows/include/**/*.h"]),
+)
+
+prebuilt_cxx_library(
+    name = "pylon",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//build_type:docs",
+    ],
+    header_only = True,
+    exported_deps = [
+        ":pylon_headers_win64",
+        "//third-party/pylon/windows/lib:PylonBase",
+        "//third-party/pylon/windows/lib:GCBase",
+        "//third-party/pylon/windows/lib:GenApi",
+    ],
+    visibility = ["PUBLIC"],
+)

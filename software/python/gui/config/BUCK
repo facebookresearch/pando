@@ -1,0 +1,13 @@
+python_library(
+    name = "config_library",
+    srcs = glob([
+        "*.py",
+    ]),
+    base_module = "gui.config",
+    visibility = ["PUBLIC"],
+    deps = [
+        "//software/pypando:pypando",
+        "//third-party/pythonlibs/PyQt5:PyQt5",
+        "//third-party/pythonlibs/pyyaml:pyyaml",
+    ],
+)

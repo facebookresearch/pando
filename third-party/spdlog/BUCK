@@ -1,0 +1,27 @@
+cxx_library(
+    name = "spdlog",
+    preferred_linkage = "static",
+    srcs = [
+        "spdlog/src/spdlog.cpp",
+        "spdlog/src/stdout_sinks.cpp",
+        "spdlog/src/color_sinks.cpp",
+        "spdlog/src/file_sinks.cpp",
+        "spdlog/src/async.cpp",
+        "spdlog/src/cfg.cpp",
+    ],
+    exported_preprocessor_flags = [
+        "-DSPDLOG_COMPILED_LIB",
+        "-DSPDLOG_FMT_EXTERNAL",
+    ] + select({
+        "config//os:windows": [
+            "/DSPDLOG_WCHAR_TO_UTF8_SUPPORT",
+        ],
+        "DEFAULT": [],
+    }),
+    exported_deps = [
+        "//third-party/fmt:fmt",
+    ],
+    public_include_directories = ["spdlog/include"],
+    raw_headers = glob(["spdlog/include/**/*.h"]),
+    visibility = ["PUBLIC"],
+)

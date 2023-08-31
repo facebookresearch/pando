@@ -1,0 +1,3 @@
+--config-file=//mode/win/x86_64/cxx.bcfg
+--target-platforms=config//platform:windows-x86_64-rel_with_deb_info
+--config=cxx.default_platform=windows-x86_64-rel_with_deb_info

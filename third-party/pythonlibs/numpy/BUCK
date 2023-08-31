@@ -1,0 +1,35 @@
+http_file(
+    name = "numpy-1.19.5-cp36-cp36m-win_amd64.whl",
+    sha256 = "dbd18bcf4889b720ba13a27ec2f2aac1981bd41203b3a3b27ba7a33f88ae4827",
+    urls = ["https://files.pythonhosted.org/packages/ea/bc/da526221bc111857c7ef39c3af670bbcf5e69c247b0d22e51986f6d0c5c2/numpy-1.19.5-cp36-cp36m-win_amd64.whl"],
+)
+
+http_file(
+    name = "numpy-1.19.5-cp36-cp36m-manylinux1_x86_64.whl",
+    sha256 = "8b5e972b43c8fc27d56550b4120fe6257fdc15f9301914380b27f74856299fea",
+    urls = ["https://files.pythonhosted.org/packages/45/b2/6c7545bb7a38754d63048c7696804a0d947328125d81bf12beaa692c3ae3/numpy-1.19.5-cp36-cp36m-manylinux1_x86_64.whl"],
+)
+
+prebuilt_python_library(
+    name = "numpy",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//:linux-x86_64",
+    ],
+    binary_src = select({
+        "config//:windows-x86_64": ":numpy-1.19.5-cp36-cp36m-win_amd64.whl",
+        "config//:linux-x86_64": ":numpy-1.19.5-cp36-cp36m-manylinux1_x86_64.whl",
+    }),
+    visibility = ["PUBLIC"],
+)
+
+python_test(
+    name = "numpy_import_test",
+    srcs = [
+        "numpy_import_test.py",
+    ],
+    visibility = ["PUBLIC"],
+    deps = [
+        ":numpy",
+    ],
+)

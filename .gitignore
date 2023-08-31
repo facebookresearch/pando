@@ -1,0 +1,12 @@
+/buck-out/**
+/.buckd/**
+/.buckconfig.local
+/.buckversion
+/.vscode/**
+/pando_logs/**
+/saw*.h5
+/software/pandoboxd/src/version.h
+/software/pando/include/version.h
+/public/**
+/output.txt
+

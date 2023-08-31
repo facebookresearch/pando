@@ -1,0 +1,6 @@
+[python]
+  package_style = standalone
+  
+[cache]
+  mode = http
+  http_url = http://ip-172-31-53-6.ec2.internal:8000/

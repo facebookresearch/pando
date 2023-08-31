@@ -1,0 +1,15 @@
+config_setting(
+    name = "msvc",
+    constraint_values = [
+        "//toolchain/constraints:msvc",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+config_setting(
+    name = "gnu",
+    constraint_values = [
+        "//toolchain/constraints:gnu",
+    ],
+    visibility = ["PUBLIC"],
+)

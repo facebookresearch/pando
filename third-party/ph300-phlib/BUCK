@@ -1,0 +1,23 @@
+cxx_library(
+    name = "ph300-phlib_headers",
+    public_include_directories = [
+        ".",
+    ],
+    raw_headers = glob([
+        "ph300-phlib/*.h",
+    ]),
+)
+
+prebuilt_cxx_library(
+    name = "ph300-phlib",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//build_type:docs",
+    ],
+    import_lib = "ph300-phlib/win32-x86_64/phlib64.lib",
+    shared_lib = "ph300-phlib/win32-x86_64/phlib64.dll",
+    exported_deps = [
+        ":ph300-phlib_headers",
+    ],
+    visibility = ["PUBLIC"],
+)

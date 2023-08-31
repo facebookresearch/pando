@@ -1,0 +1,97 @@
+# These flavors use the cross compiling toolchain provided by the Yocto SDK.
+
+[cxx#linux-xilinx-aarch64]
+  toolchain_target = //leaflabs/toolchains/linux-xilinx-aarch64:linux-xilinx-aarch64
+
+[cxx#linux-xilinx-aarch64-rel_with_deb_info]
+  toolchain_target = //leaflabs/toolchains/linux-xilinx-aarch64:linux-xilinx-aarch64
+
+[cxx#linux-xilinx-aarch64-debug]
+  toolchain_target = //leaflabs/toolchains/linux-xilinx-aarch64:linux-xilinx-aarch64
+
+# Buck requires that toolchain_target appear alone in its [cxx] section, and
+# all config is specified in the cxx_toolchain target itself. For the sake of
+# regularity, we still keep all the flags in this file (in the sections below)
+# and access them via select() statements in the cxx_toolchain target.
+
+[cxx-linux-xilinx-aarch64-flags-release]
+  cppflags = \
+    -DNDEBUG
+
+  cflags = \
+    -std=gnu11 \
+    -Wall \
+    -pedantic \
+    -Wno-missing-field-initializers \
+    -O2
+  
+  cxxppflags = \
+    -DNDEBUG
+
+  cxxflags = \
+    -std=gnu++17 \
+    -Wall \
+    -pedantic \
+    -Wno-missing-field-initializers \
+    -O2
+  
+  ldflags = \
+    -Wl,-O1 \
+    -Wl,--hash-style=gnu \
+    -Wl,--as-needed
+
+[cxx-linux-xilinx-aarch64-flags-rel_with_deb_info]
+  cppflags = \
+    -UNDEBUG
+
+  cflags = \
+    -std=gnu11 \
+    -Wall \
+    -pedantic \
+    -Wno-missing-field-initializers \
+    -O2 \
+    -g
+  
+  cxxppflags = \
+    -UNDEBUG
+
+  cxxflags = \
+    -std=gnu++17 \
+    -Wall \
+    -pedantic \
+    -Wno-missing-field-initializers \
+    -O2 \
+    -g
+  
+  ldflags = \
+    -Wl,-O1 \
+    -Wl,--hash-style=gnu \
+    -Wl,--as-needed
+
+[cxx-linux-xilinx-aarch64-flags-debug]
+  cppflags = \
+    -UNDEBUG
+
+  cflags = \
+    -std=gnu11 \
+    -Wall \
+    -pedantic \
+    -Wno-missing-field-initializers \
+    -O2\
+    -g
+  
+  cxxppflags = \
+    -UNDEBUG
+
+  cxxflags = \
+    -std=gnu++17 \
+    -Wall \
+    -pedantic \
+    -Wno-missing-field-initializers \
+    -O2\
+    -g
+  
+  ldflags = \
+    -Wl,-O1 \
+    -Wl,--hash-style=gnu \
+    -Wl,--as-needed

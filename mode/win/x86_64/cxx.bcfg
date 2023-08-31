@@ -1,0 +1,139 @@
+[cxx#windows-x86_64]
+  cppflags = \
+    /DNOMINMAX \
+    /D_CRT_SECURE_NO_WARNINGS \
+    /D_UNICODE \
+    /DUNICODE \
+    /DNDEBUG
+
+  cflags = \
+    /std:c11 \
+    /EHsc \
+    /W3 \
+    /FC \
+    /sdl \
+    /permissive- \
+    /Zc:inline \
+    /diagnostics:caret \
+    /bigobj \
+    /O2 \
+    /GL \
+    /MD
+
+  cxxppflags = \
+    /DNOMINMAX \
+    /D_CRT_SECURE_NO_WARNINGS \
+    /DNDEBUG
+
+  cxxflags = \
+    /std:c++17 \
+    /EHsc \
+    /W3 \
+    /FC \
+    /sdl \
+    /permissive- \
+    /Zc:inline \
+    /diagnostics:caret \
+    /bigobj \
+    /O2 \
+    /GL \
+    /MD
+
+  ldflags = \
+    /LTCG
+
+[cxx#windows-x86_64-rel_with_deb_info]
+
+  cppflags = \
+    /DNOMINMAX \
+    /D_CRT_SECURE_NO_WARNINGS \
+    /D_UNICODE \
+    /DUNICODE \
+    /UNDEBUG
+
+  cflags = \
+    /Z7 \
+    /std:c11 \
+    /EHsc \
+    /W3 \
+    /FC \
+    /sdl \
+    /permissive- \
+    /Zc:inline \
+    /diagnostics:caret \
+    /bigobj \
+    /O2 \
+    /GL \
+    /MD
+
+  cxxppflags = \
+    /DNOMINMAX \
+    /D_CRT_SECURE_NO_WARNINGS \
+    /UNDEBUG
+
+  cxxflags = \
+    /Z7 \
+    /std:c++17 \
+    /EHsc \
+    /W3 \
+    /FC \
+    /sdl \
+    /permissive- \
+    /Zc:inline \
+    /diagnostics:caret \
+    /bigobj \
+    /O2 \
+    /GL \
+    /MD
+
+  ldflags = \
+    /LTCG \
+    /DEBUG
+
+[cxx#windows-x86_64-debug]
+  cppflags = \
+    /DNOMINMAX \
+    /D_CRT_SECURE_NO_WARNINGS \
+    /D_UNICODE \
+    /DUNICODE \
+    /UNDEBUG
+
+  cflags = \
+    /Z7 \
+    /std:c11 \
+    /EHsc \
+    /W3 \
+    /FC \
+    /sdl \
+    /permissive- \
+    /Zc:inline \
+    /diagnostics:caret \
+    /bigobj \
+    /JMC \
+    /Od \
+    /MDd \
+    /RTC1
+
+  cxxppflags = \
+    /DNOMINMAX \
+    /D_CRT_SECURE_NO_WARNINGS \
+    /UNDEBUG
+
+  cxxflags = \
+    /Z7 \
+    /std:c++17 \
+    /EHsc \
+    /W3 \
+    /FC \
+    /sdl \
+    /permissive- \
+    /Zc:inline \
+    /diagnostics:caret \
+    /bigobj \
+    /JMC \
+    /Od \
+    /MDd \
+    /RTC1
+
+  ldflags = \
+    /DEBUG

@@ -1,0 +1,81 @@
+load("//:base_platform_constraint_values.bzl", "base_platform_constraint_values")
+
+platform(
+    name = "windows-x86_64-release",
+    constraint_values = base_platform_constraint_values.windows_x86_64 + [
+        "//build_type/constraints:release",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+platform(
+    name = "windows-x86_64-rel_with_deb_info",
+    constraint_values = base_platform_constraint_values.windows_x86_64 + [
+        "//build_type/constraints:rel_with_deb_info",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+platform(
+    name = "windows-x86_64-debug",
+    constraint_values = base_platform_constraint_values.windows_x86_64 + [
+        "//build_type/constraints:debug",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+platform(
+    name = "linux-x86_64-release",
+    constraint_values = base_platform_constraint_values.linux_x86_64 + [
+        "//build_type/constraints:release",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+platform(
+    name = "linux-x86_64-rel_with_deb_info",
+    constraint_values = base_platform_constraint_values.linux_x86_64 + [
+        "//build_type/constraints:rel_with_deb_info",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+platform(
+    name = "linux-x86_64-debug",
+    constraint_values = base_platform_constraint_values.linux_x86_64 + [
+        "//build_type/constraints:debug",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+platform(
+    name = "linux-x86_64-docs",
+    constraint_values = base_platform_constraint_values.linux_x86_64 + [
+        "//build_type/constraints:docs",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+platform(
+    name = "linux-xilinx-aarch64-release",
+    constraint_values = base_platform_constraint_values.linux_xilinx_aarch64 + [
+        "//build_type/constraints:release",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+platform(
+    name = "linux-xilinx-aarch64-rel_with_deb_info",
+    constraint_values = base_platform_constraint_values.linux_xilinx_aarch64 + [
+        "//build_type/constraints:rel_with_deb_info",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+platform(
+    name = "linux-xilinx-aarch64-debug",
+    constraint_values = base_platform_constraint_values.linux_xilinx_aarch64 + [
+        "//build_type/constraints:debug",
+    ],
+    visibility = ["PUBLIC"],
+)

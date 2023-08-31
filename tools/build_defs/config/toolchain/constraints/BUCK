@@ -1,0 +1,16 @@
+constraint_setting(
+    name = "toolchain",
+    visibility = ["PUBLIC"],
+)
+
+constraint_value(
+    name = "gnu",
+    constraint_setting = ":toolchain",
+    visibility = ["PUBLIC"],
+)
+
+constraint_value(
+    name = "msvc",
+    constraint_setting = ":toolchain",
+    visibility = ["PUBLIC"],
+)

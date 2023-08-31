@@ -1,0 +1,10 @@
+#!/bin/sh
+
+pandoboxd_path="/run/media/mmcblk1p1/pandoboxd"
+if [ -f "$pandoboxd_path" ]; then
+	#pandoboxd is present
+	echo "Starting Pandoboxd..."
+	"$pandoboxd_path" &
+else
+	echo "Warning: Pandoboxd is not present on SD card. Path: $pandoboxd_path"
+fi

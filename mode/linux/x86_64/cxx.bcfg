@@ -1,0 +1,96 @@
+[cxx#linux-x86_64]
+  cpp = /usr/bin/clang
+  cc = /usr/bin/clang
+  cxxpp = /usr/bin/clang++
+  cxx = /usr/bin/clang++
+  as = /usr/bin/as
+  ld = /usr/bin/clang++
+  ar = /usr/bin/ar
+
+  cppflags = \
+    -DNDEBUG
+
+  cflags = \
+    -std=gnu11 \
+    -Wall \
+    -fpie \
+    -pedantic \
+    -O2
+
+  cxxppflags = \
+    -DNDEBUG
+
+  cxxflags = \
+    -std=gnu++17 \
+    -Wall \
+    -fPIE \
+    -pedantic \
+    -O2
+
+  ldflags =
+
+[cxx#linux-x86_64-rel_with_deb_info]
+  cpp = /usr/bin/clang
+  cc = /usr/bin/clang
+  cxxpp = /usr/bin/clang++
+  cxx = /usr/bin/clang++
+  as = /usr/bin/as
+  ld = /usr/bin/clang++
+  ar = /usr/bin/ar
+
+  cppflags = \
+    -UNDEBUG
+
+  cflags = \
+    -std=gnu11 \
+    -Wall \
+    -fpie \
+    -pedantic \
+    -O2 \
+    -g
+
+  cxxppflags = \
+    -DNDEBUG
+
+  cxxflags = \
+    -std=gnu++17 \
+    -Wall \
+    -fPIE \
+    -pedantic \
+    -O2 \
+    -g
+
+  ldflags = 
+
+[cxx#linux-x86_64-debug]
+  cpp = /usr/bin/clang
+  cc = /usr/bin/clang
+  cxxpp = /usr/bin/clang++
+  cxx = /usr/bin/clang++
+  as = /usr/bin/as
+  ld = /usr/bin/clang++
+  ar = /usr/bin/ar
+
+  cppflags = \
+    -UNDEBUG
+
+  cflags = \
+    -std=gnu11 \
+    -Wall \
+    -fpie \
+    -pedantic \
+    -Og \
+    -g
+
+  cxxppflags = \
+    -DNDEBUG
+
+  cxxflags = \
+    -std=gnu++17 \
+    -Wall \
+    -fPIE \
+    -pedantic \
+    -Og \
+    -g
+
+  ldflags = 

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Development|x64">
+      <Configuration>Development</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Globals">
+    <RootNamespace>libboost_zlib</RootNamespace>
+    <ProjectGuid>{BC2BBC9E-4F7E-45F4-B079-A524239E4B47}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetName>$(ProjectName)-vc141-mt-x64-1_69</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <TargetName>$(ProjectName)-vc141-mt-gd-x64-1_69</TargetName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'">
+    <IntDir>$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <!--
+           4996: The POSIX name is deprecated; use the ISO conformant name.
+           4267: Conversion from size_t to int
+       -->
+      <DisableSpecificWarnings>4996;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)\..\;$(MSBuildThisFileDirectory)\..\..\..\..\;$(MSBuildThisFileDirectory)\..\..\..\zlib\;$(MSBuildThisFileDirectory)\..\..\..\zstd\zstd\lib\;</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4996</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\adler32.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\compress.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\crc32.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\deflate.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\gzclose.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\gzlib.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\gzread.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\gzwrite.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\infback.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\inffast.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\inflate.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\inftrees.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\trees.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\uncompr.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\..\..\zlib\zutil.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\iostreams\src\zlib.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\iostreams\src\zstd.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

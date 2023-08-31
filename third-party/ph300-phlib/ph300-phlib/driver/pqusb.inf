@@ -1,0 +1,112 @@
+; COPYRIGHT (C) PicoQuant GmbH 1997-2015
+
+[Version]
+Signature="$CHICAGO$"
+Class=PQUSB
+ClassGuid={55617605-BF4D-4847-ADA8-C6FC95BE35DD}
+DriverPackageType=PlugAndPlay
+Provider=%PicoQuant%
+DriverVer=07/10/2015,6.0.0.10  ; W7, W8
+
+CatalogFile=pqusb.cat
+
+
+[ClassInstall32]
+Addreg=PQUSBClassReg
+
+[PQUSBClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-20
+
+[Manufacturer]
+%PicoQuant%=PicoQuantModels,NTx86,NTamd64
+
+[PicoQuantModels.NTx86]
+%USB\VID_0E0D&PID_0003.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0003
+%USB\VID_0E0D&PID_0004.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0004
+%USB\VID_0E0D&PID_0007.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0007
+%USB\VID_0E0D&PID_0008.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0008
+%USB\VID_0E0D&PID_0009.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0009
+%USB\VID_0E0D&PID_0010.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0010
+%USB\VID_0E0D&PID_0011.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0011
+
+[PicoQuantModels.NTamd64]
+%USB\VID_0E0D&PID_0003.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0003
+%USB\VID_0E0D&PID_0004.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0004
+%USB\VID_0E0D&PID_0007.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0007
+%USB\VID_0E0D&PID_0008.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0008
+%USB\VID_0E0D&PID_0009.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0009
+%USB\VID_0E0D&PID_0010.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0010
+%USB\VID_0E0D&PID_0011.DeviceDesc%=PQUSB.Dev, USB\VID_0E0D&PID_0011
+
+[PQUSB.Dev.NTx86]
+AddReg=PQUSB.AddReg.NTx86
+CopyFiles=x86COPY
+
+[PQUSB.Dev.NTamd64]
+AddReg=PQUSB.AddReg.NTamd64
+CopyFiles=x64COPY
+
+
+[PQUSB.Dev.NTx86.Services]
+Addservice = PQUSB, 0x00000002, PQUSB.AddService.NTx86
+
+[PQUSB.Dev.NTamd64.Services]
+Addservice = PQUSB64, 0x00000002, PQUSB.AddService.NTamd64
+
+
+[PQUSB.AddService.NTx86]
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\pqusb.sys
+LoadOrderGroup = Base
+
+[PQUSB.AddService.NTamd64]
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\pqusb64.sys
+LoadOrderGroup = Base
+
+
+[PQUSB.AddReg.NTx86]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,pqusb.sys
+
+[PQUSB.AddReg.NTamd64]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,pqusb64.sys
+
+;--------------------------------------------------------------;
+
+
+[x86COPY] ; 32bit
+pqusb.sys
+
+[x64COPY] ; 64bit
+pqusb64.sys
+
+[DestinationDirs]
+DefaultDestDir = 12  ; DIRID_DRIVERS
+
+[SourceDisksNames]
+1 = %SourceDiskName%
+
+[SourceDisksFiles]
+pqusb.sys = 1 
+pqusb64.sys = 1
+
+;---------------------------------------------------------------;
+
+[Strings]
+PicoQuant="PicoQuant"
+ClassName = "PicoQuant USB Devices
+SourceDiskName = "PicoQuant PQUSB Driver Package"
+USB\VID_0E0D&PID_0003.DeviceDesc="PicoQuant PicoHarp"
+USB\VID_0E0D&PID_0004.DeviceDesc="PicoQuant HydraHarp"
+USB\VID_0E0D&PID_0007.DeviceDesc="PicoQuant Laser Device"
+USB\VID_0E0D&PID_0008.DeviceDesc="PicoQuant FluoTime"
+USB\VID_0E0D&PID_0009.DeviceDesc="PicoQuant HydraHarp USB3.0"
+USB\VID_0E0D&PID_0010.DeviceDesc="PicoQuant TimeHarp 260 USB"
+USB\VID_0E0D&PID_0011.DeviceDesc="PicoQuant MicroTime"

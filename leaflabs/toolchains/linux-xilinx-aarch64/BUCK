@@ -1,0 +1,79 @@
+load(":tool_rule.bzl", "tool_rule")
+
+# The Yocto SDK installer script, produced with petalinux-build --sdk
+sh_binary(
+    name = "sdk_sh",
+    main = "sdk.sh",
+)
+
+# Install the Yocto SDK
+genrule(
+    name = "yocto_sdk",
+    out = ".",
+    cmd = "$(exe :sdk_sh) -y -d $OUT && \
+        chmod u+w $OUT/sysroots/aarch64-xilinx-linux/proc/ && \
+        touch $OUT/sysroots/aarch64-xilinx-linux/proc/mounts && \
+        mkdir $OUT/sysroots/aarch64-xilinx-linux/run/lock",
+)
+
+# Make a shim executable build rule for each tool in the toolchain
+tool_rule("ar")
+tool_rule("as")
+tool_rule("gcc", add_sysroot_arg = True)
+tool_rule("g++", add_sysroot_arg = True)
+tool_rule("nm")
+tool_rule("objcopy")
+tool_rule("ranlib")
+tool_rule("strip")
+
+# A cxx platform flavor that uses the cross toolchain from the Yocto SDK
+cxx_toolchain(
+    name = "linux-xilinx-aarch64",
+    shared_library_extension = "so",
+    shared_library_versioned_extension_format = "so.%s",
+    static_library_extension = "a",
+    object_file_extension = "o",
+    archiver_type = "gnu",
+    compiler_type = "gcc",
+    linker_type = "gnu",
+    use_header_map = False,
+    shared_library_interface_type = "enabled",
+    archiver = ":ar",
+    assembler = ":as",
+    c_compiler = ":gcc",
+    cxx_compiler = ":g++",
+    linker = ":g++",
+    nm = ":nm",
+    objcopy_for_shared_library_interface = ":objcopy",
+    ranlib = ":ranlib",
+    strip = ":strip",
+    c_compiler_flags = select({
+        "config//build_type:release": read_config("cxx-linux-xilinx-aarch64-flags-release", "cppflags").split(" ") + read_config("cxx-linux-xilinx-aarch64-flags-release", "cflags").split(" "),
+        "config//build_type:rel_with_deb_info": read_config("cxx-linux-xilinx-aarch64-flags-rel_with_deb_info", "cppflags").split(" ") + read_config("cxx-linux-xilinx-aarch64-flags-rel_with_deb_info", "cflags").split(" "),
+        "config//build_type:debug": read_config("cxx-linux-xilinx-aarch64-flags-debug", "cppflags").split(" ") + read_config("cxx-linux-xilinx-aarch64-flags-debug", "cflags").split(" "),
+        "DEFAULT": [],
+    }),
+    cxx_compiler_flags = select({
+        "config//build_type:release": read_config("cxx-linux-xilinx-aarch64-flags-release", "cxxppflags").split(" ") + read_config("cxx-linux-xilinx-aarch64-flags-release", "cxxflags").split(" "),
+        "config//build_type:rel_with_deb_info": read_config("cxx-linux-xilinx-aarch64-flags-rel_with_deb_info", "cxxppflags").split(" ") + read_config("cxx-linux-xilinx-aarch64-flags-rel_with_deb_info", "cxxflags").split(" "),
+        "config//build_type:debug": read_config("cxx-linux-xilinx-aarch64-flags-debug", "cxxppflags").split(" ") + read_config("cxx-linux-xilinx-aarch64-flags-debug", "cxxflags").split(" "),
+        "DEFAULT": [],
+    }),
+    linker_flags = select({
+        "config//build_type:release": read_config("cxx-linux-xilinx-aarch64-flags-release", "ldflags").split(" "),
+        "config//build_type:rel_with_deb_info": read_config("cxx-linux-xilinx-aarch64-flags-rel_with_deb_info", "ldflags").split(" "),
+        "config//build_type:debug": read_config("cxx-linux-xilinx-aarch64-flags-debug", "ldflags").split(" "),
+        "DEFAULT": [],
+    }),
+    # In libstdc++ 6.0.25, you must -lstdc++fs to use std::filesystem (https://stackoverflow.com/a/33159746)
+    static_dep_runtime_ld_flags = ["-lstdc++fs"],
+    # Using a cxx_toolchain rule forces "untracked_headers = error", while the
+    # default for toolchains defined in buckconfig files is "ignore". We
+    # therefore have to whitelist system headers.
+    headers_whitelist = [
+        ".*/yocto_sdk/sysroots/x86_64-petalinux-linux/usr/lib/aarch64-xilinx-linux/gcc/aarch64-xilinx-linux/8.2.0/include/.*",
+        ".*/yocto_sdk/sysroots/x86_64-petalinux-linux/usr/lib/aarch64-xilinx-linux/gcc/aarch64-xilinx-linux/8.2.0/include-fixed/.*",
+        ".*/yocto_sdk/sysroots/aarch64-xilinx-linux/usr/include/.*",
+    ],
+    visibility = ["PUBLIC"],
+)

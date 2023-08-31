@@ -1,0 +1,114 @@
+; COPYRIGHT (C) PicoQuant GmbH 2017-2020
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=USBDevice
+ClassGuid = {88BAE032-5A81-49f0-BC3D-A4FF138216D6}
+DriverPackageType=PlugAndPlay
+Provider=%PicoQuant%
+CatalogFile=multiharp.cat
+DriverVer=02/26/2020,1.2.3.10
+
+[SourceDisksNames.x86]
+1 = %PQCYUSB_Install%,,,\bin32
+
+[SourceDisksNames.amd64]
+2 = %PQCYUSB_Install%,,,\bin64
+
+[SourceDisksFiles.x86]
+pqcyusb.sys=1
+WdfCoInstaller01011.dll=1
+
+[SourceDisksFiles.amd64]
+pqcyusb.sys=2
+WdfCoInstaller01011.dll=2
+
+[DestinationDirs]
+PQCYUSB.Files.Ext = 10,System32\Drivers
+CoInstaller_CopyFiles = 11
+
+[Manufacturer]
+%PicoQuant%=Device,NTx86,NTamd64
+
+;for x86 platforms
+[Device.NTx86]
+%VID_0E0D&PID_0013.DeviceDesc%=PQCYUSB, USB\VID_0E0D&PID_0013
+
+;for x64 platforms
+[Device.NTamd64]
+%VID_0E0D&PID_0013.DeviceDesc%=PQCYUSB, USB\VID_0E0D&PID_0013
+
+[PQCYUSB.NTx86]
+CopyFiles=PQCYUSB.Files.Ext
+AddReg=PQCYUSB.AddReg
+
+[PQCYUSB.NTx86.HW]
+AddReg=PQCYUSB.AddReg.Guid
+
+[PQCYUSB.NTx86.Services]
+Addservice = PQCYUSB,2,PQCYUSB.AddService
+
+[PQCYUSB.NTamd64]
+CopyFiles=PQCYUSB.Files.Ext
+AddReg=PQCYUSB.AddReg
+
+[PQCYUSB.NTamd64.HW]
+AddReg=PQCYUSB.AddReg.Guid
+
+[PQCYUSB.NTamd64.Services]
+Addservice = PQCYUSB,2,PQCYUSB.AddService
+
+[PQCYUSB.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,pqcyusb.sys
+HKR,,DriverBase,,pqcyusb.sys
+HKR,"Parameters","MaximumTransferSize",0x10001,4096
+HKR,"Parameters","DebugLevel",0x10001,2
+HKR,,FriendlyName,,%PQCYUSB_Description%
+
+[PQCYUSB.AddService]
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\pqcyusb.sys
+AddReg         = PQCYUSB.AddReg
+LoadOrderGroup = Base
+
+[PQCYUSB.Files.Ext]
+pqcyusb.sys
+
+[PQCYUSB.AddReg.Guid]
+HKR,,DriverGUID,,"{D9D25F1D-24FC-42c4-9A3D-2C2F76071C98}"
+
+;============ WDF Coinstaller installation =============
+
+[PQCYUSB.NTamd64.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[PQCYUSB.NTx86.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[CoInstaller_CopyFiles]
+WdfCoInstaller01011.dll
+
+[CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller01011.dll,WdfCoInstaller"
+
+[PQCYUSB.NTamd64.Wdf]
+KmdfService = PQCYUSB, PQCYUSB_wdfsect
+
+[PQCYUSB.NTx86.Wdf]
+KmdfService = PQCYUSB, PQCYUSB_wdfsect
+
+[PQCYUSB_wdfsect]
+KmdfLibraryVersion = 1.11
+
+[Strings]
+PicoQuant           = "PicoQuant"
+PQCYUSB_Description = "PicoQuant PQCYUSB Driver"
+PQCYUSB_Install     = "PicoQuant MultiHarp Driver Installation Disk"
+
+VID_0E0D&PID_0013.DeviceDesc="PicoQuant MultiHarp"

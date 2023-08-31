@@ -1,0 +1,15 @@
+config_setting(
+    name = "x86_64",
+    constraint_values = [
+        "//cpu/constraints:x86_64",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+config_setting(
+    name = "aarch64",
+    constraint_values = [
+        "//cpu/constraints:aarch64",
+    ],
+    visibility = ["PUBLIC"],
+)

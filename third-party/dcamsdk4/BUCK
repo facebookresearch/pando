@@ -1,0 +1,18 @@
+cxx_library(
+    name = "dcamsdk4_headers",
+    public_include_directories = ["inc"],
+    raw_headers = glob(["inc/*.h"]),
+)
+
+prebuilt_cxx_library(
+    name = "dcamsdk4",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//build_type:docs",
+    ],
+    static_lib = "lib/win64/dcamapi.lib",
+    exported_deps = [":dcamsdk4_headers"],
+    exported_linker_flags = ["delayimp.lib", "/DELAYLOAD:dcamapi.dll"],
+    preferred_linkage = "static",
+    visibility = ["PUBLIC"],
+)

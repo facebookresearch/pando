@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Development|x64">
+      <Configuration>Development</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Globals">
+    <RootNamespace>libboost_regex</RootNamespace>
+    <ProjectGuid>{261862F2-D176-482B-AB77-67BC04F5C5EA}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetName>$(ProjectName)-vc141-mt-x64-1_69</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <TargetName>$(ProjectName)-vc141-mt-gd-x64-1_69</TargetName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'">
+    <IntDir>$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)\..\;$(MSBuildThisFileDirectory)\..\libs\;$(MSBuildThisFileDirectory)\..\..\..\..\;</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\cpp_regex_traits.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\cregex.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\c_regex_traits.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\fileiter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\icu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\instances.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\posix_api.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\regex.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\regex_debug.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\regex_raw_buffer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\regex_traits_defaults.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\static_mutex.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\usinstances.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\w32_regex_traits.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\wc_regex_traits.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\wide_posix_api.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)\..\libs\regex\src\.\winstances.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,181 @@
+stages:
+    - check
+    - build
+    - test
+    - archive
+    
+.run_on_mr_and_tags_rule: &run_on_mr_and_tags_rule
+    rules:
+        - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+        - if: '$CI_COMMIT_TAG != null'
+
+
+# Job that is run on merge requests
+check_formatting:
+    image: registry.gitlab.leaflabs.com/bldg8/ovrsource/code-format
+    interruptible: true
+    stage: check
+    variables:
+        ENFORCE_FORMAT_DIR: 'software/'
+    script:
+        - ln -s `which clang-format-8` /usr/bin/clang-format
+        - cd "$CI_PROJECT_DIR"
+        - git-clang-format-8 --commit remotes/origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME -q --diff -- $ENFORCE_FORMAT_DIR | sed '/no modified files to format/d' > clang-format.diff
+        - cat clang-format.diff
+        - black -q --diff $ENFORCE_FORMAT_DIR > black.diff
+        - cat black.diff
+        - if [ -s clang-format.diff ] || [ -s black.diff ]; then echo "Detected formatting issues; please fix"; exit 1; else echo "Formatting is correct"; exit 0; fi
+    only:
+        - merge_requests
+
+########################
+### Windows Platform ###
+########################
+.build_windows_project: &build_windows_project
+    image: registry.gitlab.leaflabs.com/bldg8/ovrsource/winltsc2019_vs2017:2021.01.12.01
+    interruptible: true
+    stage: build
+    tags:
+        - windows
+    script:
+        # If this is a tagged release, do a buck clean to ensure no odd artifact caching impacts the build
+        - if ($ENV:CI_COMMIT_TAG -like "release_*") { Write-Host Cleaning before release build; buck clean }
+        - git status
+        # Generate the version.h header for Pando (overwrites the default checked in version)
+        - buck run @mode/win/x86_64/release //software/python/generate_version_header:generate_version_header -- --header --define-name=JULIET_VERSION_STRING | Tee-Object software/pando/include/version.h
+        - buck build @mode/win/x86_64/rel_with_deb_info @mode/ci //software/pando/...
+        - buck build @mode/win/x86_64/release @mode/ci --show-outputs //software/python/gui:pando | add-content -encoding UTF8 outputs.txt
+        - buck build @mode/win/x86_64/release @mode/ci --show-outputs //software/python/limonene:limonene | add-content -encoding UTF8 outputs.txt
+        - buck build @mode/win/x86_64/release @mode/ci --show-outputs //software/python/split_camera_h5:split_camera_h5 | add-content -encoding UTF8 outputs.txt
+        - buck build @mode/win/x86_64/release @mode/ci --show-outputs //software/python/visualizations:visualizations | add-content -encoding UTF8 outputs.txt
+        - >
+            C:\tools\msys64\usr\bin\bash.exe -lc "
+            mkdir -p .artifacts;
+            cut -d' ' -sf2  outputs.txt |  cygpath -f - | xargs cp -t .artifacts;
+            "
+    artifacts:
+        paths:
+            - .artifacts/*
+
+build_windows_project:
+    <<: *build_windows_project
+    <<: *run_on_mr_and_tags_rule
+
+# Nightly builds are generally just for making sure the cache is updated on the windows build VM
+# The cache update is time intensive, so it doesn't make sense to do it with every build, as 95%
+# of the time, nothing in the cache actually changes
+nightly_build_windows_project:
+    <<: *build_windows_project
+    only:
+        - schedules
+
+run_windows_tests:
+    <<: *run_on_mr_and_tags_rule
+    image: registry.gitlab.leaflabs.com/bldg8/ovrsource/winltsc2019_vs2017:2021.01.12.01
+    interruptible: true
+    stage: test
+    tags:
+        - windows
+    script:
+        - buck test @mode/win/x86_64/rel_with_deb_info @mode/ci --exclude needs_hardware --xml results.xml //software/pando/...
+
+    dependencies:
+        - build_windows_project
+
+    artifacts:
+        paths:
+            - results.xml
+        reports:
+            junit: results.xml
+
+
+.build_linux_project: &build_linux_project
+    image: registry.gitlab.leaflabs.com/bldg8/ovrsource/buck-linux:2021.01.12.01
+    interruptible: true
+    stage: build
+    tags:
+      - linux
+      - autoscale
+
+###################
+### Sphinx docs ###
+###################
+build_sphinx_docs:
+    <<: *build_linux_project
+    <<: *run_on_mr_and_tags_rule
+    cache: {} # Disable cache, source files aren't proper dependencies of //software/docs:doxygen_docs
+    script:
+        - buck build @mode/linux/x86_64/docs @mode/ci --show-outputs //software/doc:sphinx_docs >> output.txt
+        - mkdir -p public
+        - sed -rn 's/.* (.*)/\1\/\./p' output.txt | xargs cp -at public
+    artifacts:
+        paths:
+            - public
+
+
+#############################
+### linux-x86_64 Platform ###
+#############################
+build_linux-x86_64_project:
+    <<: *build_linux_project
+    <<: *run_on_mr_and_tags_rule
+    script:
+        - buck build @mode/linux/x86_64/release @mode/ci --show-outputs //software/python/limonene/... >> outputs.txt
+        - mkdir -p .artifacts
+        - cut -d' ' -sf2  outputs.txt | xargs cp -t .artifacts
+    artifacts:
+        paths:
+            - .artifacts/*
+
+
+#############################
+### AArch64 Cross Compile ###
+#############################
+build_aarch64_project:
+    <<: *build_linux_project
+    <<: *run_on_mr_and_tags_rule
+    cache: {} # Disable cache for this particular job, as caching is leading to odd errors
+    script:
+        # Generate the version.h header for pandoboxd (overwrites the default checked in version)
+        - buck run @mode/linux/x86_64/release //software/python/generate_version_header:generate_version_header -- --header --define-name=CLEMENTINE_VERSION_STRING > software/pandoboxd/src/version.h
+        # Build libpandobox and other targets (a couple of tests)
+        - buck build @mode/linux/xilinx-aarch64/rel_with_deb_info --show-outputs //software/libpandobox/... >> outputs.txt
+        # Build pandoboxd
+        - buck build @mode/linux/xilinx-aarch64/release --show-outputs //software/pandoboxd:pandoboxd >> outputs.txt
+        - mkdir -p .artifacts
+        - cut -d' ' -sf2  outputs.txt | xargs cp -t .artifacts
+    artifacts:
+        paths:
+            - .artifacts/*
+
+###########################
+### Publish Sphinx docs ###
+###########################
+pages:
+    stage: archive
+    only:
+        - tags
+    dependencies:
+        - build_sphinx_docs
+    script:
+        - stat public/
+    artifacts:
+        paths:
+            - public
+
+##############################
+### Archive to Artifactory ###
+##############################
+archive_release_package:
+  image: curlimages/curl
+  stage: archive
+  variables:
+    ARTIFACTORY_URL: https://artifactory.leaflabs.com/
+    ARTIFACTORY_USER: gitlab-ci
+  only:
+    - tags
+  dependencies:
+    - build_windows_project
+  script:
+    - curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt u --user="$ARTIFACTORY_USER" --access-token="$ARTIFACTORY_ACCESS_TOKEN" --url="$ARTIFACTORY_URL" .artifacts/pando.pex bldg8-releases/ovrsource/pando-windows-$CI_COMMIT_TAG.pex

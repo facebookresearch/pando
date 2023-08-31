@@ -1,0 +1,6 @@
+Downloaded sofware and developer's library from here: https://www.picoquant.com/dl_software/HydraHarp400/HydraHarp400_SW_and_DLL_v3_0_0_2.zip
+(md5sum bb8cc545d561f6fb4a41975830d8bd28)
+
+unzip and run "HydraHarp HHLib v3.0.0.2\Windows\installation\setup.exe"
+
+Files copied from C:\Program Files\PicoQuant\HydraHarp-HHLibv30\ and C:\Windows\System32\hhlib64.dll

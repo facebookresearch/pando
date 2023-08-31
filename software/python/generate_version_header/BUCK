@@ -1,0 +1,21 @@
+python_binary(
+    name = "generate_version_header",
+    main_module = "generate_version_header.generate_version_header",
+    visibility = [
+        "PUBLIC",
+    ],
+    deps = [
+        ":generate_version_header_library",
+    ],
+)
+
+python_library(
+    name = "generate_version_header_library",
+    base_module = "generate_version_header",
+    srcs = [
+        "generate_version_header.py",
+    ],
+    visibility = [
+        "PUBLIC",
+    ],
+)

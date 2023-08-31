@@ -1,0 +1,6 @@
+Downloaded sofware and developer's library from here: https://www.picoquant.com/dl_software/PicoHarp300/PicoHarp300_SW_and_DLL_v3_0_0_3.zip
+(md5sum ee43d7fbf2ea08d1edb54a9243ab03fa)
+
+unzip and run "PH300 PHLib v3.0.0.3\Windows\installationsetup.exe"
+
+Files copied from C:\Program Files\PicoQuant\PH300-PHLibv30 and C:\Windows\System32\phlib64.dll

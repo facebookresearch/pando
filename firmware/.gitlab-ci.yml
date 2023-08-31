@@ -1,0 +1,104 @@
+stages:
+  - simulate
+  - build_pando_box_project
+  - package
+  - archive
+
+run_sims:
+    image: registry.gitlab.leaflabs.com/bldg8/pando_box-platform/icarus
+    stage: simulate
+    interruptible: true
+    script:
+      - cd test
+      - make compile # It would be possible to break the simulation compile and execution into 2 stages if needed
+      - pytest -o junit_family=xunit2 --junitxml=test_results.xml run_tests.py
+    artifacts:
+        reports:
+            junit: test/test_results.xml
+    only:
+        - merge_requests
+
+build_pando_box_project:
+  image:
+    name: registry.gitlab.leaflabs.com/bldg8/pando_box-platform/vivado:2019.2
+    entrypoint: ["/bin/bash", "-i", "-c"]
+  stage: build_pando_box_project
+  interruptible: true
+  tags:
+    - linux
+    - autoscale
+  rules:
+    # Always run the nightly build
+    - if: '$NIGHTLY'
+      when: always
+    # If a merge request is targeting master, create a manual pipeline that can be run
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+      when: manual
+      allow_failure: true
+  script:
+    - export TERM=xterm         # Gitlab sets TERM=dumb, which breaks petalinux...
+    - mkdir -p .artifacts
+    - ./build_bitstream.sh
+    - cp vivado_output/pando_box_bd.bit .artifacts/
+    - cp vivado_output/pando_box_bd.bin .artifacts/
+    - cp vivado_output/pando_box_bd.xsa .artifacts/
+    - cp vivado_output/*.rpt .artifacts/ # Timing/P&R/etc reports
+    - xvfb-run -a ./build_boot_image.sh # xvfb-run creates a virtual framebuffer for the petalinux tools
+    - cp pando_box_petalinux_project/images/linux/BOOT.BIN .artifacts/
+    - cp pando_box_petalinux_project/images/linux/image.ub .artifacts/
+  artifacts:
+    when: always
+    paths:
+      - .artifacts/pando_box_bd.bit
+      - .artifacts/pando_box_bd.bin
+      - .artifacts/pando_box_bd.xsa
+      - .artifacts/BOOT.BIN
+      - .artifacts/image.ub
+      - pando_box_petalinux_project/build/config.log
+      - .artifacts/*.rpt
+
+.package_artifacts: &package_artifacts
+  image: curlimages/curl
+  stage: package
+  tags:
+    - linux
+  script:
+    - 'curl -H "PRIVATE-TOKEN: $GITLAB_API_TOKEN" -o BOOT.BIN https://gitlab.leaflabs.com/api/v4/projects/329/jobs/artifacts/master/raw/.artifacts/BOOT.BIN?job=build_pando_box_project'
+    - 'curl -H "PRIVATE-TOKEN: $GITLAB_API_TOKEN" -o image.ub https://gitlab.leaflabs.com/api/v4/projects/329/jobs/artifacts/master/raw/.artifacts/image.ub?job=build_pando_box_project'
+    - 'curl -H "PRIVATE-TOKEN: $GITLAB_API_TOKEN" -o pandoboxd https://gitlab.leaflabs.com/api/v4/projects/319/jobs/artifacts/master/raw/.artifacts/pandoboxd?job=build_aarch64_project'
+    - tar -czvf release.tar.gz BOOT.BIN image.ub pandoboxd
+
+
+mr_package_artifacts:
+  <<: *package_artifacts
+  only:
+    - master
+    - merge_requests
+  artifacts:
+    when: always
+    paths:
+      - release.tar.gz
+
+release_package_artifacts:
+  <<: *package_artifacts
+  only:
+    - tags
+  artifacts:
+    expire_in: 10 year
+    when: always
+    paths:
+      - release.tar.gz
+
+archive_release_package:
+  image: curlimages/curl
+  stage: archive
+  variables:
+    ARTIFACTORY_URL: https://artifactory.leaflabs.com/
+    ARTIFACTORY_USER: gitlab-ci
+  only:
+    - tags
+  dependencies:
+    - release_package_artifacts
+  script:
+    - curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt u --user="$ARTIFACTORY_USER" --access-token="$ARTIFACTORY_ACCESS_TOKEN" --url="$ARTIFACTORY_URL" release.tar.gz bldg8-releases/pando_box-platform/pando_box-platform-$CI_COMMIT_TAG.tar.gz

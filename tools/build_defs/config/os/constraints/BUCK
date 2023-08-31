@@ -1,0 +1,16 @@
+constraint_setting(
+    name = "os",
+    visibility = ["PUBLIC"],
+)
+
+constraint_value(
+    name = "windows",
+    constraint_setting = ":os",
+    visibility = ["PUBLIC"],
+)
+
+constraint_value(
+    name = "linux",
+    constraint_setting = ":os",
+    visibility = ["PUBLIC"],
+)

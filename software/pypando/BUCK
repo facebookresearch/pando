@@ -1,0 +1,13 @@
+cxx_library(
+    name = "pypando",
+    srcs = ["pypando.cpp"],
+    soname = "pypando.pyd",
+    preferred_linkage = "shared",
+    link_style = "static",
+    visibility = ["PUBLIC"],
+    deps = [
+        "//software/python/generate_version_header:generate_version_header",
+        "//software/pando:pando",
+        "//third-party/pybind11:pybind11",
+    ],
+)

@@ -1,0 +1,92 @@
+auto_stop: false
+bin_size_ns: 1000
+calc_g2i: false
+pandoboxd_ip_addr: 169.254.12.34
+count_integ_period_ns: 65536000
+cri_integ_period_ns: 65536000
+cri_offset:
+  0: 0
+  1: 0
+  2: 0
+  3: 0
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+cri_width:
+  0: 0
+  1: 0
+  2: 0
+  3: 0
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+device: HYDRA_HARP_T3
+dtof_integ_period_ns: 65536000
+dtof_range_max: 20000
+dtof_range_min: 0
+enabled_channels:
+- 0
+- 1
+- 2
+- 3
+- 4
+- 5
+- 6
+- 7
+exp_type: TD
+experiment_length: 60.0
+final_bin_count: 2000
+hharp_input_offsets:
+  0: 0
+  1: 0
+  2: 0
+  3: 0
+  4: 0
+  5: 0
+  6: 0
+  7: 0
+laser_sync_period_ps: 12500
+log_analyzed_data: true
+log_peripheral_data: true
+log_raw_data: false
+mock_file: ''
+multi_harp_sync_tdead_ps: 0
+multi_harp_sync_trigger_edge: 0
+multi_harp_sync_trigger_level_mv: 0
+multi_harp_tdead_ps: {}
+multi_harp_trigger_edge: {}
+multi_harp_trigger_level_mv: {}
+n_levels: 3
+output_dir: E:/validation/120420/hh-t3
+pf32_bit_mode: SIXTEEN
+pf32_firmware_path: ./third-party/pf32_api/pf32_api/bitfiles/PF32_USB3_[1864-8bit].bit
+pf32_laser_master: true
+points_per_level: 12
+publish_raw_data: false
+rebin_factor: 3
+use_pandoboxd: true
+use_pps: true
+xharp_level:
+  0: 50
+  1: 50
+  2: 50
+  3: 50
+  4: 50
+  5: 50
+  6: 50
+  7: 50
+xharp_sync_div: 8
+xharp_sync_level: 50
+xharp_sync_offset: -10000
+xharp_sync_zerox: 10
+xharp_zerox:
+  0: 10
+  1: 10
+  2: 10
+  3: 10
+  4: 10
+  5: 10
+  6: 10
+  7: 10

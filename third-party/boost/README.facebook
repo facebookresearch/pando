@@ -1,0 +1,12 @@
+History of checked-in versions:
+
+04/04/2019: 1.67 (starting this doc)
+
+04/04/2019: 1.69:
+  Boost 1.69 was released but breaks compilation on Mac. 1.70 fixes this.
+  To make it compile on Mac, two headers are back ported (D14769829).
+04/05/2019: Fixing problems with boost::process which are backported from 1.70.
+04/23/2019: Fixing undefined behaviour in boost::circular_buffer in v1.69. (D15044708)
+05/14/2019: backported https://github.com/boostorg/random/commit/d217e56535816d6b9d662638674939ef205c57e4 to suppress spurious warnings (D15343023)
+
+07/15/2019: Patch: D16230827: Tag random_generator as using uninitialized data for MSAN.

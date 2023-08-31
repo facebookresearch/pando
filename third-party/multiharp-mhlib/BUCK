@@ -1,0 +1,23 @@
+cxx_library(
+    name = "hydraharp-hhlib_headers",
+    public_include_directories = [
+        ".",
+    ],
+    raw_headers = glob([
+        "multiharp-mhlib/*.h",
+    ]),
+)
+
+prebuilt_cxx_library(
+    name = "multiharp-mhlib",
+    compatible_with = [
+        "config//:windows-x86_64",
+        "config//build_type:docs",
+    ],
+    import_lib = "multiharp-mhlib/win32-x86_64/mhlib64.lib",
+    shared_lib = "multiharp-mhlib/win32-x86_64/mhlib64.dll",
+    exported_deps = [
+        ":hydraharp-hhlib_headers",
+    ],
+    visibility = ["PUBLIC"],
+)

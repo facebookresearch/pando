@@ -1,0 +1,26 @@
+python_binary(
+    name = "limonene",
+    main_module = "limonene.limonene",
+    visibility = ["PUBLIC"],
+    deps = [
+        "//software/python/limonene:limonene_library",
+    ],
+    zip_safe = False,
+)
+
+python_library(
+    name = "limonene_library",
+    srcs = glob([
+        "*.py",
+    ]),
+    base_module = "limonene",
+    visibility = ["PUBLIC"],
+    deps = [
+        "//third-party/pythonlibs/h5py:h5py",
+        "//software/protobuf:pandoboxd_rpc_py",
+        "//software/protobuf:pando_protobuf_py",
+        "//third-party/pythonlibs/protobuf:protobuf",
+        "//third-party/pythonlibs/pyzmq:pyzmq",
+        "//third-party/pythonlibs/pyvcd:pyvcd",
+    ],
+)

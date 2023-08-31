@@ -1,0 +1,60 @@
+cxx_library(
+    name = "libpandobox",
+    preferred_linkage = "static",
+    compatible_with = [
+        "config//:linux-xilinx-aarch64",
+        "config//build_type:docs",
+    ],
+    srcs = native.glob([
+        "src/*.cpp",
+    ]),
+    include_directories = [
+        "src",
+    ],
+    public_include_directories = [
+        "include",
+    ],
+    raw_headers = native.glob([
+        "src/*.h",
+        "include/*.h",
+    ]),
+    visibility = ["PUBLIC"],
+)
+
+cxx_test(
+    name = "libpandobox_test",
+    compatible_with = [
+        "config//:linux-xilinx-aarch64",
+    ],
+    srcs = [
+        "test/libpandobox_test.cpp",
+    ],
+    include_directories = [
+        "src",
+    ],
+    raw_headers = native.glob([
+        "src/*.h",
+    ]),
+    deps = [
+        ":libpandobox",
+    ],
+)
+
+cxx_test(
+    name = "register_test",
+    compatible_with = [
+        "config//:linux-xilinx-aarch64",
+    ],
+    srcs = [
+        "test/register_test.cpp",
+    ],
+    include_directories = [
+        "src",
+    ],
+    raw_headers = native.glob([
+        "src/*.h",
+    ]),
+    deps = [
+        ":libpandobox",
+    ],
+)

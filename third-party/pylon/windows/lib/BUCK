@@ -1,0 +1,23 @@
+prebuilt_cxx_library(
+    name = "PylonBase",
+    static_lib = "PylonBase_v6_3.lib",
+    exported_linker_flags = ["delayimp.lib", "/DELAYLOAD:PylonBase_v6_3.dll"],
+    preferred_linkage = "static",
+    visibility = ["PUBLIC"],
+)
+
+prebuilt_cxx_library(
+    name = "GCBase",
+    static_lib = "GCBase_MD_VC141_v3_1_Basler_pylon.lib",
+    exported_linker_flags = ["delayimp.lib", "/DELAYLOAD:GCBase_MD_VC141_v3_1_Basler_pylon.dll"],
+    preferred_linkage = "static",
+    visibility = ["PUBLIC"],
+)
+
+prebuilt_cxx_library(
+    name = "GenApi",
+    static_lib = "GenApi_MD_VC141_v3_1_Basler_pylon.lib",
+    exported_linker_flags = ["delayimp.lib", "/DELAYLOAD:GenApi_MD_VC141_v3_1_Basler_pylon.dll"],
+    preferred_linkage = "static",
+    visibility = ["PUBLIC"],
+)
